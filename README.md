@@ -1,12 +1,12 @@
-Flex-Mix
+Chocolate.grid.js
 ========
 
 ## Introduction
-#### Welcome to Flex-Mix. 
+Chocolate.grid.js this is the mechanism that structures the items in the grid. It based on plain JavaScript, WebPack Module...
 
 
 ## Installation
 ```
-git clone https://github.com/DaniilSydorenko/flex-mix.git
+git clone https://github.com/DaniilSydorenko/chocolate.grid.js.git
 ```
 
