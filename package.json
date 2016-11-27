@@ -1,0 +1,34 @@
+{
+  "name": "chocolate.grid.js",
+  "version": "1.0.0",
+  "description": "Test broserify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniil Sydorenko",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0",
+    "browserify": "^13.1.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-rename": "^1.2.2",
+    "webpack": "^1.13.2",
+    "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "gulp": "^4.0.0-alpha.2",
+    "gulp-rename": "^1.2.2",
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.13.2",
+    "webpack-stream": "^3.2.0"
+  },
+  "keywords": [
+    "javascript",
+    "grid",
+    "js-grid",
+    "front-end",
+    "layout"
+  ]
+}
