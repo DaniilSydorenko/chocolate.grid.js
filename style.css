@@ -4,10 +4,13 @@ body {
 
 .js-chocolate {
     position: relative;
+    margin: 0 auto;
 }
 
 .js-tile {
     position: absolute;
+    background: #f0f0f0;
+    width: 33.3%; /* change to 100% */
 }
 
 .tile-content {

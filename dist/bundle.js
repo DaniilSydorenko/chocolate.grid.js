@@ -61,11 +61,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* 1 */
 /***/function (module, exports, __webpack_require__) {
 
-	var Grid = __webpack_require__(2);
+	/**
+  * Dependencies
+  */
+	var Sizes = __webpack_require__(2);
+	var Grid = __webpack_require__(3);
+	var Colors = __webpack_require__(4);
 
 	module.exports = function () {
 		function Chocolate(grid, item) {
 			_classCallCheck(this, Chocolate);
+
+			// Set grid, params, etc
 
 			this._gridBody = grid;
 			this._gridItem = item;
@@ -102,107 +109,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 			}
 
-			/**
-    * Simple counter
-    */
+			//@TODO
+			/*
+          create func that set cols depends of viewport width and cols width
+          1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
+           BUILD COLUMN
+     */
 
-		}, {
-			key: 'setColGrid',
-			value: function setColGrid() {
-				var elements = document.getElementsByClassName('js-tile');
+			// separate get heights
+			// separate
 
-				var numbers = [];
+			// change somewhere vars -> lets
 
-				var _iteratorNormalCompletion = true;
-				var _didIteratorError = false;
-				var _iteratorError = undefined;
-
-				try {
-					for (var _iterator = elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-						var element = _step.value;
-
-						numbers.push(element.clientHeight);
-					}
-				} catch (err) {
-					_didIteratorError = true;
-					_iteratorError = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion && _iterator.return) {
-							_iterator.return();
-						}
-					} finally {
-						if (_didIteratorError) {
-							throw _iteratorError;
-						}
-					}
-				}
-
-				var nlength = numbers.length;
-				var columns = 3;
-				var grid = {};
-
-				// Set columns
-				for (var j = 0; j < columns; j++) {
-					grid[j] = [];
-				}
-
-				// Get numbers
-				for (var i = 0; i < nlength; i++) {
-
-					for (var col in grid) {
-
-						if (grid.hasOwnProperty(col)) {
-
-							var number = numbers.splice(0, 1)[0];
-
-							if (number) {
-
-								if (grid[col].length < 1) {
-									// IF EMPTY
-									grid[col].push(number);
-								} else if (grid[col].length >= 1) {
-									// IF NOT EMPTY
-
-									var allCols = [];
-
-									for (var c in grid) {
-
-										if (grid.hasOwnProperty(c)) {
-											var s = grid[c];
-											if (s.length === 1) {
-												allCols.push(s[0]);
-											} else if (s.length > 1) {
-
-												var total = s.reduce(function (a, b) {
-													return a + b;
-												});
-
-												allCols.push(total);
-											}
-										}
-									}
-
-									// Get index of smallest value
-									var index = 0;
-									var value = allCols[0];
-									for (var t = 1; t < allCols.length; t++) {
-										if (allCols[t] < value) {
-											value = allCols[t];
-											index = t;
-										}
-									}
-
-									// Insert value to the smallest column
-									grid[index].push(number);
-								}
-							}
-						}
-					}
-				}
-
-				//console.log(grid);
-			}
+			// create grid with prototype
+			// grid -> Map?
 
 			/**
     * Object counter
@@ -211,20 +131,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'setColGrid2',
 			value: function setColGrid2() {
-				var elements = document.getElementsByClassName('js-tile');
 
+				//
+				var elements = document.getElementsByClassName('js-tile');
 				var numbers = [];
 
 				for (var key in elements) {
 					if (elements.hasOwnProperty(key)) {
 						var obj1 = _defineProperty({}, key, elements[key].clientHeight);
-						console.log(elements[key].clientHeight);
+						//console.log(elements[key].clientHeight);
 						numbers.push(obj1);
 					}
 				}
 
 				var nlength = numbers.length;
-				var columns = 3;
+				var columns = 3; // this value will get from separate func !!!!
+
 				var grid = {};
 
 				// Set columns
@@ -232,41 +154,67 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					grid[j] = [];
 				}
 
+				//////////////////////////////
+				/*
+        get element quantity
+        set grid
+     */
+				//////////////////////////////
+
 				// Get numbers
 				for (var i = 0; i < nlength; i++) {
 
 					for (var col in grid) {
+						// change on "of" or "simple for"
+
+						//console.log("---> Column1: " + col);
 
 						if (grid.hasOwnProperty(col)) {
+							// remove
 							var number = numbers.splice(0, 1)[0]; // Grab first element
 
 							if (number) {
+								// ?
 
+								// Here start to fill columns by elements
 								if (grid[col].length < 1) {
-									grid[col].push(number); // Push element if column iss empty
+									grid[col].push(number); // Push element if column is empty
+
+									// if not empty should detect smallest column
 								} else if (grid[col].length >= 1) {
-									var allCols = []; // Count sum of heights of all former elements if column is not empty
+									// Simple else ?
+
+									var allCols = []; // Count sum of heights of all former elements if column is not empty | change on CONST
+									// All const on top !!
 
 									for (var c in grid) {
+										// change on "of" or "simple for"
+
+										//console.log("---> Column2: " + c);
 
 										if (grid.hasOwnProperty(c)) {
-											var s = grid[c];
+											// remove
+
+											var s = grid[c]; // column
 
 											// Convert object to simple numbers for sum counting
-											var properValues = [];
-											var _iteratorNormalCompletion2 = true;
-											var _didIteratorError2 = false;
-											var _iteratorError2 = undefined;
+											var properValues = []; // All const on top !!??
+
+											var _iteratorNormalCompletion = true;
+											var _didIteratorError = false;
+											var _iteratorError = undefined;
 
 											try {
-												for (var _iterator2 = s[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-													var forSumCol = _step2.value;
+												for (var _iterator = s[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+													var forSumCol = _step.value;
+													// go thru elements
 
-
-													var newVal = 0;
+													var newVal = 0; // All const on top !!?? | zero as default ???
 
 													for (var colVal in forSumCol) {
+														// change on "of" or "simple for"
 														if (forSumCol.hasOwnProperty(colVal)) {
+															//remove
 															newVal = parseInt(forSumCol[colVal]);
 														}
 													}
@@ -274,16 +222,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 													properValues.push(newVal);
 												}
 											} catch (err) {
-												_didIteratorError2 = true;
-												_iteratorError2 = err;
+												_didIteratorError = true;
+												_iteratorError = err;
 											} finally {
 												try {
-													if (!_iteratorNormalCompletion2 && _iterator2.return) {
-														_iterator2.return();
+													if (!_iteratorNormalCompletion && _iterator.return) {
+														_iterator.return();
 													}
 												} finally {
-													if (_didIteratorError2) {
-														throw _iteratorError2;
+													if (_didIteratorError) {
+														throw _iteratorError;
 													}
 												}
 											}
@@ -300,9 +248,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 										}
 									}
 
+									// Move to separate func
 									// Get index of smallest value
 									var index = 0,
-									    value = allCols[0];
+									    // All const on top !!??
+									value = allCols[0];
 									for (var t = 1; t < allCols.length; t++) {
 										if (allCols[t] < value) {
 											value = allCols[t];
@@ -326,7 +276,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function setStyle() {
 
 				var grid = this.setColGrid2();
-				console.log(grid);
+
+				//console.log(grid);
 				var elements = document.getElementsByClassName('js-tile');
 				for (var col in grid) {
 					if (grid.hasOwnProperty(col)) {
@@ -347,7 +298,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 									var gridColumn = parseInt(col) + 1;
 									var sumWithMargin = sum + 10 * e;
 
-									elements[index].style.left = 302 * col + "px";
+									elements[index].style.left = 400 * col + "px";
 									elements[index].style.top = sum + 10 * e + "px";
 									elements[index].innerHTML = "<p>Height: " + element[index] + " and Sum: " + sum + "</p>";
 									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
@@ -358,8 +309,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 					}
 				}
+
 				// Nepravilnyj posdhet, nado sumirovat dlinu otstupov
-				console.log(sum);
+				//console.log(sum);
 
 				document.getElementsByClassName('js-chocolate')[0].style.height = sum + 'px';
 			}
@@ -376,6 +328,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	/***/
 },
 /* 2 */
+/***/function (module, exports) {
+	var Sizes = function () {
+		function Sizes() {
+			_classCallCheck(this, Sizes);
+
+			this._height = window.innerHeight;
+			this._width = window.innerWidth;
+		}
+
+		_createClass(Sizes, [{
+			key: 'height',
+			get: function get() {
+				return this._height;
+			}
+		}, {
+			key: 'width',
+			get: function get() {
+				return this._width;
+			}
+		}]);
+
+		return Sizes;
+	}();
+
+	module.exports = new Sizes();
+
+	/***/
+},
+/* 3 */
 /***/function (module, exports) {
 	var Grid = function () {
 		function Grid() {
@@ -397,6 +378,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	module.exports = new Grid();
+
+	/***/
+},
+/* 4 */
+/***/function (module, exports) {
+	var Colors = function () {
+		function Colors() {
+			_classCallCheck(this, Colors);
+
+			this._blue = "#cbd0e1";
+			this._green = "#d1f313";
+			this._red = "#ff0000";
+		}
+
+		_createClass(Colors, [{
+			key: 'colors',
+			get: function get() {
+				return [this._blue, this._green, this._red];
+			}
+		}]);
+
+		return Colors;
+	}();
+
+	module.exports = new Colors();
 
 	/***/
 }
