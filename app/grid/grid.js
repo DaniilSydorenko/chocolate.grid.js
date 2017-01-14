@@ -1,3 +1,5 @@
+'use strict';
+
 class Grid {
     constructor() {
         this._quantity = 24;

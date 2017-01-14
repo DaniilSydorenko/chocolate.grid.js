@@ -1,23 +1,30 @@
+'use strict';
+
 /**
  * Dependencies
  */
 var Sizes = require('./app/sizes/sizes');
+var Styles = require('./app/styles/styles');
 var Grid = require('./app/grid/grid');
 var Colors = require('./app/colors/colors');
 
 module.exports = class Chocolate {
-	constructor(grid, item) {
+
+	constructor(grid, item, containerWidth, columnsWidth) {
+
         // Set grid, params, etc
+
+        // Set number of columns and container width
+        this._columnsNumber = 4;
+        this._columnsWidth = columnsWidth;
+
+        this._containerWidth = containerWidth;
 
 		this._gridBody = grid;
 		this._gridItem = item;
 
 		this._name = 'Full parameters';
 		this._grid = 0;
-	}
-
-	showAll() {
-		console.log(this._gridBody, this._gridItem);
 	}
 
 	getFullParams() {
@@ -46,16 +53,10 @@ module.exports = class Chocolate {
 
     //@TODO
     /*
-           create func that set cols depends of viewport width and cols width
-           1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
-
-           BUILD COLUMN
-
+       create func that set cols depends of viewport width and cols width
+       1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
      */
 
-
-    // separate get heights
-    // separate
 
     // change somewhere vars -> lets
 
@@ -66,23 +67,12 @@ module.exports = class Chocolate {
 	 * Object counter
 	 */
 	setColGrid2() {
-
-        //
-		var elements = document.getElementsByClassName('js-tile');
-		var numbers = [];
-
-		for (var key in elements) {
-			if (elements.hasOwnProperty(key)) {
-				var obj1 = {
-					[key]: elements[key].clientHeight
-				};
-				//console.log(elements[key].clientHeight);
-				numbers.push(obj1);
-			}
-		}
-
+		var elements = document.querySelectorAll(".js-tile");
+		var numbers = Sizes.getElementsHeights(elements);
 		var nlength = numbers.length;
-		var columns = 3; // this value will get from separate func !!!!
+
+		// !!!!!!
+		var columns = Sizes.getColumnNumber(this._containerWidth, this._columnsWidth);
 
 		var grid = {};
 
@@ -91,34 +81,34 @@ module.exports = class Chocolate {
 			grid[j] = [];
 		}
 
-        //////////////////////////////
-            /*
-                get element quantity
-                set grid
-             */
-        //////////////////////////////
+		//////////////////////////////
+		/*
+		 get element quantity
+		 set grid
+		 */
+		//////////////////////////////
 
 		// Get numbers
 		for (var i = 0; i < nlength; i++) {
 
 			for (var col in grid) { // change on "of" or "simple for"
 
-                //console.log("---> Column1: " + col);
+				//console.log("---> Column1: " + col);
 
-                if (grid.hasOwnProperty(col)) { // remove
+				if (grid.hasOwnProperty(col)) { // remove
 					var number = numbers.splice(0, 1)[0]; // Grab first element
 
 					if (number) { // ?
 
-                        // Here start to fill columns by elements
+						// Here start to fill columns by elements
 						if (grid[col].length < 1) {
 							grid[col].push(number); // Push element if column is empty
 
-                        // if not empty should detect smallest column
+							// if not empty should detect smallest column
 						} else if (grid[col].length >= 1) { // Simple else ?
 
 							var allCols = []; // Count sum of heights of all former elements if column is not empty | change on CONST
-                            // All const on top !!
+							// All const on top !!
 
 							for (var c in grid) { // change on "of" or "simple for"
 
@@ -157,7 +147,7 @@ module.exports = class Chocolate {
 								}
 							}
 
-                            // Move to separate func
+							// Move to separate func
 							// Get index of smallest value
 							var index = 0, // All const on top !!??
 								value = allCols[0];
@@ -187,32 +177,41 @@ module.exports = class Chocolate {
 	setStyle() {
 
 		let grid = this.setColGrid2();
+		console.log(grid);
+
 
 		//console.log(grid);
-		let elements = document.getElementsByClassName('js-tile');
+		let elements = document.querySelectorAll(".js-tile");
+		let gridContainer = document.querySelector('.js-chocolate');
+
 		for (var col in grid) {
+
 			if (grid.hasOwnProperty(col)) {
 
 				let column = grid[col];
 				var sum = 0;
 
 				for (let e = 0; e < column.length; e++) {
-					let element = column[e];
+					var element = column[e];
 
 					for (let index in element) {
 
 						if (element.hasOwnProperty(index)) {
 
 							// set style
-							console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
+							//console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
 
 							let gridColumn = parseInt(col) + 1;
-							let sumWithMargin = sum + (10*e);
+							let sumWithMargin = sum + (10 * e);
 
-							elements[index].style.left = (400 * col) + "px";
-							elements[index].style.top = (sum + (10*e))+ "px";
+							elements[index].style.left = (270 * col) + "px";
+							elements[index].style.top = (sum + (20 * e)) + "px";
+							elements[index].classList.add("col-" + col);
 							elements[index].innerHTML = "<p>Height: " + element[index] + " and Sum: " + sum + "</p>";
 							//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
+
+							// Add element to grid column
+							//gridVerticalColumn.appendChild(elements[index]);
 
 							sum += element[index];
 						}
@@ -223,9 +222,32 @@ module.exports = class Chocolate {
 
 
 		// Nepravilnyj posdhet, nado sumirovat dlinu otstupov
-		//console.log(sum);
-
 		document.getElementsByClassName('js-chocolate')[0].style.height = sum + 'px';
+	}
+
+
+	setGridColumns() {
+		let gridContainer = document.querySelector('.js-chocolate');
+
+		for (let i = 0; i < 3; i++) {
+
+			// Create grid columns
+			var gridVerticalColumn = document.createElement('div');
+			gridVerticalColumn.id = "col-" + i;
+
+			let elements = document.getElementsByClassName('col-' + i);
+			console.log(elements);
+
+			for (let e = 0; e <= elements.length; e++) {
+				console.log(elements[e]);
+				var el = elements[e];
+				gridVerticalColumn.appendChild(elements[e]);
+			}
+
+			gridContainer.appendChild(gridVerticalColumn);
+
+		}
+
 	}
 
 };

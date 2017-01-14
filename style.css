@@ -5,12 +5,16 @@ body {
 .js-chocolate {
     position: relative;
     margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .js-tile {
     position: absolute;
     background: #f0f0f0;
-    width: 33.3%; /* change to 100% */
+    width: 100%;
+    max-width: 250px;
+    /*margin-right: 20px;*/
 }
 
 .tile-content {

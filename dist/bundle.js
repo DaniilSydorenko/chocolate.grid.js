@@ -54,25 +54,52 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /* 0 */
 /***/function (module, exports, __webpack_require__) {
 
-	window.Chocolate = __webpack_require__(1);
+	'use strict';
+
+	var Chocolate = __webpack_require__(1);
+
+	// Init Chocolate
+
+	var chocolate = new Chocolate('js-chocolate', 'js-tile', 1200, 250);
+
+	// Init Style
+
+	chocolate.setStyle();
+
+	// Set listeners !!!
+
+	window.addEventListener('resize', function () {
+		//console.log(window.innerWidth);
+		//console.log(chocolate._containerWidth);
+	});
 
 	/***/
 },
 /* 1 */
 /***/function (module, exports, __webpack_require__) {
 
+	'use strict';
+
 	/**
   * Dependencies
   */
+
 	var Sizes = __webpack_require__(2);
-	var Grid = __webpack_require__(3);
-	var Colors = __webpack_require__(4);
+	var Styles = __webpack_require__(3);
+	var Grid = __webpack_require__(4);
+	var Colors = __webpack_require__(5);
 
 	module.exports = function () {
-		function Chocolate(grid, item) {
+		function Chocolate(grid, item, containerWidth, columnsWidth) {
 			_classCallCheck(this, Chocolate);
 
 			// Set grid, params, etc
+
+			// Set number of columns and container width
+			this._columnsNumber = 4;
+			this._columnsWidth = columnsWidth;
+
+			this._containerWidth = containerWidth;
 
 			this._gridBody = grid;
 			this._gridItem = item;
@@ -82,6 +109,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		_createClass(Chocolate, [{
+			key: 'getElements',
+			value: function getElements(con) {}
+		}, {
 			key: 'showAll',
 			value: function showAll() {
 				console.log(this._gridBody, this._gridItem);
@@ -111,10 +141,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//@TODO
 			/*
-          create func that set cols depends of viewport width and cols width
-          1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
-           BUILD COLUMN
-     */
+      create func that set cols depends of viewport width and cols width
+      1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
+    */
 
 			// separate get heights
 			// separate
@@ -131,21 +160,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'setColGrid2',
 			value: function setColGrid2() {
-
-				//
-				var elements = document.getElementsByClassName('js-tile');
-				var numbers = [];
-
-				for (var key in elements) {
-					if (elements.hasOwnProperty(key)) {
-						var obj1 = _defineProperty({}, key, elements[key].clientHeight);
-						//console.log(elements[key].clientHeight);
-						numbers.push(obj1);
-					}
-				}
-
+				var elements = document.querySelectorAll(".js-tile");
+				var numbers = Sizes.getElementsHeights(elements);
 				var nlength = numbers.length;
-				var columns = 3; // this value will get from separate func !!!!
+
+				// !!!!!!
+				var columns = Sizes.getColumnNumber(this._containerWidth, this._columnsWidth);
 
 				var grid = {};
 
@@ -156,8 +176,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				//////////////////////////////
 				/*
-        get element quantity
-        set grid
+     get element quantity
+     set grid
      */
 				//////////////////////////////
 
@@ -276,10 +296,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function setStyle() {
 
 				var grid = this.setColGrid2();
+				console.log(grid);
 
 				//console.log(grid);
-				var elements = document.getElementsByClassName('js-tile');
+				var elements = document.querySelectorAll(".js-tile");
+				var gridContainer = document.querySelector('.js-chocolate');
+
 				for (var col in grid) {
+
 					if (grid.hasOwnProperty(col)) {
 
 						var column = grid[col];
@@ -293,15 +317,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								if (element.hasOwnProperty(index)) {
 
 									// set style
-									console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
+									//console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
 
 									var gridColumn = parseInt(col) + 1;
 									var sumWithMargin = sum + 10 * e;
 
-									elements[index].style.left = 400 * col + "px";
-									elements[index].style.top = sum + 10 * e + "px";
+									elements[index].style.left = 270 * col + "px";
+									elements[index].style.top = sum + 20 * e + "px";
+									elements[index].classList.add("col-" + col);
 									elements[index].innerHTML = "<p>Height: " + element[index] + " and Sum: " + sum + "</p>";
 									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
+
+									// Add element to grid column
+									//gridVerticalColumn.appendChild(elements[index]);
 
 									sum += element[index];
 								}
@@ -311,9 +339,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				// Nepravilnyj posdhet, nado sumirovat dlinu otstupov
-				//console.log(sum);
-
 				document.getElementsByClassName('js-chocolate')[0].style.height = sum + 'px';
+			}
+		}, {
+			key: 'setGridColumns',
+			value: function setGridColumns() {
+				var gridContainer = document.querySelector('.js-chocolate');
+
+				for (var i = 0; i < 3; i++) {
+
+					// Create grid columns
+					var gridVerticalColumn = document.createElement('div');
+					gridVerticalColumn.id = "col-" + i;
+
+					var elements = document.getElementsByClassName('col-' + i);
+					console.log(elements);
+
+					for (var e = 0; e <= elements.length; e++) {
+						console.log(elements[e]);
+						var el = elements[e];
+						gridVerticalColumn.appendChild(elements[e]);
+					}
+
+					gridContainer.appendChild(gridVerticalColumn);
+				}
 			}
 		}, {
 			key: 'grid',
@@ -329,7 +378,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 },
 /* 2 */
 /***/function (module, exports) {
-	var Sizes = function () {
+
+	'use strict';
+
+	module.exports = function () {
 		function Sizes() {
 			_classCallCheck(this, Sizes);
 
@@ -347,17 +399,60 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			get: function get() {
 				return this._width;
 			}
+		}], [{
+			key: 'getColumnNumber',
+			value: function getColumnNumber(containerWidth, columnsWidth) {
+
+				// container width exmp - 1200
+				// col width exmp - 250
+				// col number exmp - 4
+				// 1200 / 250 = 4x250 + 200 // poka bez shiriny kolony
+				// permanent margin ??
+
+				//@TODO
+				// Responsive column
+				// Permanent column
+
+				var columnNumber = Math.floor(containerWidth / columnsWidth); // 4 - 25%
+
+				var columnWidth = 100 / columnNumber;
+
+				// need percents
+
+				return columnNumber;
+			}
+		}, {
+			key: 'getElementsHeights',
+			value: function getElementsHeights(elements) {
+				var numbers = [];
+				for (var index = 0; index < elements.length; index++) {
+					var obj1 = _defineProperty({}, index, elements[index].clientHeight);
+					numbers.push(obj1);
+				}
+
+				return numbers;
+			}
 		}]);
 
 		return Sizes;
 	}();
 
-	module.exports = new Sizes();
-
 	/***/
 },
 /* 3 */
 /***/function (module, exports) {
+
+	module.exports = function Styles() {
+		_classCallCheck(this, Styles);
+	};
+
+	/***/
+},
+/* 4 */
+/***/function (module, exports) {
+
+	'use strict';
+
 	var Grid = function () {
 		function Grid() {
 			_classCallCheck(this, Grid);
@@ -381,7 +476,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	/***/
 },
-/* 4 */
+/* 5 */
 /***/function (module, exports) {
 	var Colors = function () {
 		function Colors() {
