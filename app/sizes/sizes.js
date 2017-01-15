@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = class Sizes {
+class Sizes {
     constructor() {
         this._height = window.innerHeight;
         this._width = window.innerWidth;
@@ -14,7 +14,7 @@ module.exports = class Sizes {
         return this._width;
     }
 
-    static getColumnNumber(containerWidth, columnsWidth) {
+    getColumnNumber(containerWidth, columnWidth) {
 
         // container width exmp - 1200
         // col width exmp - 250
@@ -26,9 +26,7 @@ module.exports = class Sizes {
         // Responsive column
         // Permanent column
 
-        let columnNumber = Math.floor(containerWidth / columnsWidth); // 4 - 25%
-
-        let columnWidth = 100 / columnNumber;
+        let columnNumber = Math.floor(containerWidth / columnWidth);
 
         // need percents
 
@@ -36,7 +34,7 @@ module.exports = class Sizes {
     }
 
 
-    static getElementsHeights(elements) {
+    getElementsHeights(elements) {
         let numbers = [];
         for (let index = 0; index < elements.length; index++) {
             var obj1 = {
@@ -44,8 +42,9 @@ module.exports = class Sizes {
             };
             numbers.push(obj1);
         }
-
         return numbers;
     }
-};
+}
+
+module.exports = new Sizes();
 

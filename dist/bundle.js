@@ -56,22 +56,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	'use strict';
 
-	var Chocolate = __webpack_require__(1);
-
-	// Init Chocolate
-
-	var chocolate = new Chocolate('js-chocolate', 'js-tile', 1200, 250);
-
-	// Init Style
-
-	chocolate.setStyle();
-
-	// Set listeners !!!
-
-	window.addEventListener('resize', function () {
-		//console.log(window.innerWidth);
-		//console.log(chocolate._containerWidth);
-	});
+	window.Chocolate = __webpack_require__(1);
 
 	/***/
 },
@@ -89,83 +74,231 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Grid = __webpack_require__(4);
 	var Colors = __webpack_require__(5);
 
-	module.exports = function () {
-		function Chocolate(grid, item, containerWidth, columnsWidth) {
-			_classCallCheck(this, Chocolate);
+	module.exports = function Chocolate(params) {
+		_classCallCheck(this, Chocolate);
 
-			// Set grid, params, etc
+		this._containerSelector = params.containerSelector;
+		this._tileSelector = params.tileSelector;
 
-			// Set number of columns and container width
-			this._columnsNumber = 4;
-			this._columnsWidth = columnsWidth;
+		// Set grid, params, etc
+		// Set number of columns and container width
+		this._columnUserWidth = params.columnWidth;
+		this._containerUserWidth = params.containerWidth;
 
-			this._containerWidth = containerWidth;
+		var elements = document.querySelectorAll(".js-tile");
+		var element = document.querySelector(".js-tile");
+		var gridContainer = document.querySelector('.js-chocolate');
 
-			this._gridBody = grid;
-			this._gridItem = item;
+		this._columnWidth = elements[0].clientWidth;
+		this._containerWidth = gridContainer.clientWidth;
 
-			this._name = 'Full parameters';
-			this._grid = 0;
+		var numbers = Sizes.getElementsHeights(elements);
+		var columns = Sizes.getColumnNumber(this._containerUserWidth, this._columnUserWidth);
+
+		var grid = Grid.createGrid(numbers, columns);
+
+		// Init style
+		Styles.setStyleToItems(grid, elements, gridContainer);
+
+		//this.watchGridSize();
+
+
+		// window resize
+		window.addEventListener('resize', function () {
+			//console.log("cont: " + gridContainer.clientWidth);
+			//console.log("win: " + window.innerWidth);
+
+			//if (window.innerWidth < gridContainer.clientWidth) {
+			if (window.innerWidth < 1200) {
+				// recounting
+				// createGrid(containerWidth)
+				// setStyles()
+
+				var _numbers = Sizes.getElementsHeights(elements);
+				var _columns = Sizes.getColumnNumber(gridContainer.clientWidth, element.clientWidth);
+				console.log(_columns);
+				var _grid = Grid.createGrid(_numbers, _columns);
+
+				Styles.setStyleToItems(_grid, elements, gridContainer);
+			}
+
+			// pass new value of container and set new styles
+		});
+
+		//@TODO remove listeners
+	}
+
+	//watchGridSize() {
+	//	window.addEventListener('resize', function(){
+	//		console.log(11);
+	//	});
+	//}
+
+
+	//@TODO
+	/*
+    create func that set cols depends of viewport width and cols width
+    1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
+  */
+
+	// change somewhere vars -> lets
+
+	// create grid with prototype
+	// grid -> Map?
+
+	;
+
+	/***/
+},
+/* 2 */
+/***/function (module, exports) {
+
+	'use strict';
+
+	var Sizes = function () {
+		function Sizes() {
+			_classCallCheck(this, Sizes);
+
+			this._height = window.innerHeight;
+			this._width = window.innerWidth;
 		}
 
-		_createClass(Chocolate, [{
-			key: 'getElements',
-			value: function getElements(con) {}
-		}, {
-			key: 'showAll',
-			value: function showAll() {
-				console.log(this._gridBody, this._gridItem);
+		_createClass(Sizes, [{
+			key: 'getColumnNumber',
+			value: function getColumnNumber(containerWidth, columnWidth) {
+
+				// container width exmp - 1200
+				// col width exmp - 250
+				// col number exmp - 4
+				// 1200 / 250 = 4x250 + 200 // poka bez shiriny kolony
+				// permanent margin ??
+
+				//@TODO
+				// Responsive column
+				// Permanent column
+
+				var columnNumber = Math.floor(containerWidth / columnWidth);
+
+				// need percents
+
+				return columnNumber;
 			}
 		}, {
-			key: 'getFullParams',
-			value: function getFullParams() {
-				return {
-					height: this._gridBody,
-					width: this._gridItem
-				};
+			key: 'getElementsHeights',
+			value: function getElementsHeights(elements) {
+				var numbers = [];
+				for (var index = 0; index < elements.length; index++) {
+					var obj1 = _defineProperty({}, index, elements[index].clientHeight);
+					numbers.push(obj1);
+				}
+				return numbers;
 			}
 		}, {
-			key: 'getMultiGrid',
-			value: function getMultiGrid() {
-				return this.grid.filter(function (i) {
-					return i < 20;
-				});
+			key: 'height',
+			get: function get() {
+				return this._height;
 			}
 		}, {
-			key: 'getMultiGrid2',
-			value: function getMultiGrid2() {
-				return this.grid.map(function (i) {
-					return i * 2;
-				});
+			key: 'width',
+			get: function get() {
+				return this._width;
 			}
+		}]);
 
-			//@TODO
-			/*
-      create func that set cols depends of viewport width and cols width
-      1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
-    */
+		return Sizes;
+	}();
 
-			// separate get heights
-			// separate
+	module.exports = new Sizes();
 
-			// change somewhere vars -> lets
+	/***/
+},
+/* 3 */
+/***/function (module, exports) {
+	var Styles = function () {
+		function Styles() {
+			_classCallCheck(this, Styles);
+		}
 
-			// create grid with prototype
-			// grid -> Map?
+		_createClass(Styles, [{
+			key: 'setStyleToItems',
+			value: function setStyleToItems(grid, elements, container) {
+
+				for (var col in grid) {
+
+					if (grid.hasOwnProperty(col)) {
+
+						var column = grid[col];
+						var sum = 0;
+
+						for (var e = 0; e < column.length; e++) {
+							var element = column[e];
+
+							for (var index in element) {
+
+								if (element.hasOwnProperty(index)) {
+									//console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
+
+									//let gridColumn = parseInt(col) + 1;
+									//let sumWithMargin = sum + (10 * e);
+
+									elements[index].style.left = 270 * col + "px";
+									elements[index].style.top = sum + 20 * e + "px";
+									elements[index].classList.add("col-" + col);
+									elements[index].innerHTML = "<p>Height: " + element[index] + "<br>" + " Sum: " + sum + "</p>";
+									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
+
+									sum += element[index];
+								}
+							}
+						}
+					}
+				}
+
+				container.style.height = sum + 'px';
+			}
+		}]);
+
+		return Styles;
+	}();
+
+	module.exports = new Styles();
+
+	/***/
+},
+/* 4 */
+/***/function (module, exports) {
+
+	'use strict';
+
+	var Grid = function () {
+		function Grid() {
+			_classCallCheck(this, Grid);
+
+			this._quantity = 24;
+			this._cols = 12;
+			this._rows = 12;
+		}
+
+		_createClass(Grid, [{
+			key: 'getFullGrid',
+			value: function getFullGrid() {
+				return [this._cols, this._rows, this._quantity];
+			}
 
 			/**
-    * Object counter
+    * Create grid
     */
 
 		}, {
-			key: 'setColGrid2',
-			value: function setColGrid2() {
-				var elements = document.querySelectorAll(".js-tile");
-				var numbers = Sizes.getElementsHeights(elements);
+			key: 'createGrid',
+			value: function createGrid(numbers, columns) {
+				//var elements = document.querySelectorAll(".js-tile");
+				//var numbers = Sizes.getElementsHeights(elements);
+
 				var nlength = numbers.length;
 
 				// !!!!!!
-				var columns = Sizes.getColumnNumber(this._containerWidth, this._columnsWidth);
+				//var columns = Sizes.getColumnNumber(this._containerUserWidth, this._columnUserWidth);
 
 				var grid = {};
 
@@ -292,54 +425,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return grid;
 			}
 		}, {
-			key: 'setStyle',
-			value: function setStyle() {
-
-				var grid = this.setColGrid2();
-				console.log(grid);
-
-				//console.log(grid);
-				var elements = document.querySelectorAll(".js-tile");
-				var gridContainer = document.querySelector('.js-chocolate');
-
-				for (var col in grid) {
-
-					if (grid.hasOwnProperty(col)) {
-
-						var column = grid[col];
-						var sum = 0;
-
-						for (var e = 0; e < column.length; e++) {
-							var element = column[e];
-
-							for (var index in element) {
-
-								if (element.hasOwnProperty(index)) {
-
-									// set style
-									//console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
-
-									var gridColumn = parseInt(col) + 1;
-									var sumWithMargin = sum + 10 * e;
-
-									elements[index].style.left = 270 * col + "px";
-									elements[index].style.top = sum + 20 * e + "px";
-									elements[index].classList.add("col-" + col);
-									elements[index].innerHTML = "<p>Height: " + element[index] + " and Sum: " + sum + "</p>";
-									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
-
-									// Add element to grid column
-									//gridVerticalColumn.appendChild(elements[index]);
-
-									sum += element[index];
-								}
-							}
-						}
-					}
-				}
-
-				// Nepravilnyj posdhet, nado sumirovat dlinu otstupov
-				document.getElementsByClassName('js-chocolate')[0].style.height = sum + 'px';
+			key: 'getMultiGrid',
+			value: function getMultiGrid() {
+				return this.grid.filter(function (i) {
+					return i < 20;
+				});
+			}
+		}, {
+			key: 'getMultiGrid2',
+			value: function getMultiGrid2() {
+				return this.grid.map(function (i) {
+					return i * 2;
+				});
 			}
 		}, {
 			key: 'setGridColumns',
@@ -363,109 +460,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 					gridContainer.appendChild(gridVerticalColumn);
 				}
-			}
-		}, {
-			key: 'grid',
-			get: function get() {
-				return this._grid = Grid.getFullGrid();
-			}
-		}]);
-
-		return Chocolate;
-	}();
-
-	/***/
-},
-/* 2 */
-/***/function (module, exports) {
-
-	'use strict';
-
-	module.exports = function () {
-		function Sizes() {
-			_classCallCheck(this, Sizes);
-
-			this._height = window.innerHeight;
-			this._width = window.innerWidth;
-		}
-
-		_createClass(Sizes, [{
-			key: 'height',
-			get: function get() {
-				return this._height;
-			}
-		}, {
-			key: 'width',
-			get: function get() {
-				return this._width;
-			}
-		}], [{
-			key: 'getColumnNumber',
-			value: function getColumnNumber(containerWidth, columnsWidth) {
-
-				// container width exmp - 1200
-				// col width exmp - 250
-				// col number exmp - 4
-				// 1200 / 250 = 4x250 + 200 // poka bez shiriny kolony
-				// permanent margin ??
-
-				//@TODO
-				// Responsive column
-				// Permanent column
-
-				var columnNumber = Math.floor(containerWidth / columnsWidth); // 4 - 25%
-
-				var columnWidth = 100 / columnNumber;
-
-				// need percents
-
-				return columnNumber;
-			}
-		}, {
-			key: 'getElementsHeights',
-			value: function getElementsHeights(elements) {
-				var numbers = [];
-				for (var index = 0; index < elements.length; index++) {
-					var obj1 = _defineProperty({}, index, elements[index].clientHeight);
-					numbers.push(obj1);
-				}
-
-				return numbers;
-			}
-		}]);
-
-		return Sizes;
-	}();
-
-	/***/
-},
-/* 3 */
-/***/function (module, exports) {
-
-	module.exports = function Styles() {
-		_classCallCheck(this, Styles);
-	};
-
-	/***/
-},
-/* 4 */
-/***/function (module, exports) {
-
-	'use strict';
-
-	var Grid = function () {
-		function Grid() {
-			_classCallCheck(this, Grid);
-
-			this._quantity = 24;
-			this._cols = 12;
-			this._rows = 12;
-		}
-
-		_createClass(Grid, [{
-			key: 'getFullGrid',
-			value: function getFullGrid() {
-				return [this._cols, this._rows, this._quantity];
 			}
 		}]);
 
