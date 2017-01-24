@@ -3,7 +3,7 @@ class Styles {
 
 	}
 
-	setStyleToItems(grid, elements, container) {
+	setStyleToItems(grid, elements, container, containerFullWidth) {
 
 		for (var col in grid) {
 
@@ -26,7 +26,7 @@ class Styles {
 							elements[index].style.left = (270 * col) + "px";
 							elements[index].style.top = (sum + (20 * e)) + "px";
 							elements[index].classList.add("col-" + col);
-							elements[index].innerHTML = "<p>Height: " + element[index] + "<br>" + " Sum: " + sum + "</p>";
+							//elements[index].innerHTML = "<p>Height: " + element[index] + "<br>" + " Sum: " + sum + "</p>";
 							//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
 
 							sum += element[index];
@@ -37,6 +37,7 @@ class Styles {
 		}
 
 		container.style.height = sum + 'px';
+		container.style.width = containerFullWidth + 'px';
 	}
 }
 

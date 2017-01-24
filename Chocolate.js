@@ -12,81 +12,92 @@ module.exports = class Chocolate {
 
 	constructor(params) {
 
+		var elements = document.querySelectorAll(".js-tile");
+		var element = document.querySelector(".js-tile");
+		let gridContainer = document.querySelector('.js-chocolate');
+
+
+		var elementsIMG = document.querySelectorAll(".js-tile");
+		Sizes.setElementsHeight(elementsIMG);
+
 		this._containerSelector = params.containerSelector;
 		this._tileSelector = params.tileSelector;
 
         // Set grid, params, etc
         // Set number of columns and container width
         this._columnUserWidth = params.columnWidth;
-        this._containerUserWidth = params.containerWidth;
+        //this._containerUserWidth = params.containerWidth;
+
+		this._columnUserMargin = params.columnMargin;
 
 
-		var elements = document.querySelectorAll(".js-tile");
-		var element = document.querySelector(".js-tile");
-		let gridContainer = document.querySelector('.js-chocolate');
 
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
 
 		let numbers = Sizes.getElementsHeights(elements);
-		let columns = Sizes.getColumnNumber(this._containerUserWidth, this._columnUserWidth);
+		let columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
 
 		let grid = Grid.createGrid(numbers, columns);
 
+		let containerFullWidth = Sizes.getContainerWidth(this._columnUserWidth, columns, this._columnUserMargin);
+
 		// Init style
-		Styles.setStyleToItems(grid, elements, gridContainer);
+		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth -20);
 
 
-		//this.watchGridSize();
+		var colWidth = this._columnUserWidth,
+			colMargin = this._columnUserMargin;
 
+		//window.addEventListener('load', setSize, true);
+		setSize();
+		window.addEventListener('resize', setSize);
 
-		// window resize
-		window.addEventListener('resize', function(){
-			//console.log("cont: " + gridContainer.clientWidth);
-			//console.log("win: " + window.innerWidth);
+		function setSize(){
+			let containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
-			//if (window.innerWidth < gridContainer.clientWidth) {
-			if (window.innerWidth < 1200) {
+			if (window.innerWidth <= containerWidth) {
 				// recounting
-				// createGrid(containerWidth)
-				// setStyles()
+				console.log(containerWidth);
+
+				// Get new columns number because window width is only one important
+				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
 
 				let numbers = Sizes.getElementsHeights(elements);
-				let columns = Sizes.getColumnNumber(gridContainer.clientWidth, element.clientWidth);
-
-				console.log(columns);
 
 				let grid = Grid.createGrid(numbers, columns);
 
-				Styles.setStyleToItems(grid, elements, gridContainer);
+				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
 
+				//console.log(columns);
+				//console.log(containerFullWidth);
+
+				Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth);
+
+			} else if (window.innerWidth <= 1400) { // maxWidth instead 1400px
+				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
+
+				let numbers = Sizes.getElementsHeights(elements);
+
+				let grid = Grid.createGrid(numbers, columns);
+
+				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
+
+				//console.log(columns);
+				//console.log(containerFullWidth);
+
+				Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth);
 			}
 
 			// pass new value of container and set new styles
-		});
+		}
 
-		//@TODO remove listeners
-
+		//@TODO:
+		// remove listeners
+		// change somewhere vars -> lets
+		// create grid with prototype
+		// grid -> Map?
 	}
-
-
-	//watchGridSize() {
-	//	window.addEventListener('resize', function(){
-	//		console.log(11);
-	//	});
-	//}
-
-
-    //@TODO
-    /*
-       create func that set cols depends of viewport width and cols width
-       1200px, col - 300 - it means 4 cols - I need this value ---> 4 !!!
-     */
-
-    // change somewhere vars -> lets
-
-    // create grid with prototype
-    // grid -> Map?
 
 };
 

@@ -14,8 +14,13 @@ class Sizes {
         return this._width;
     }
 
-    getColumnNumber(containerWidth, columnWidth) {
+    setElementsHeight(elements) {
+        for (let e = 0; e < elements.length; e++) {
+            elements[e].setAttribute("data-height", elements[e].clientHeight);
+        }
+    }
 
+    getColumnNumber(containerWidth, columnWidth) {
         // container width exmp - 1200
         // col width exmp - 250
         // col number exmp - 4
@@ -25,20 +30,32 @@ class Sizes {
         //@TODO
         // Responsive column
         // Permanent column
-
-        let columnNumber = Math.floor(containerWidth / columnWidth);
-
         // need percents
 
-        return columnNumber;
+        return Math.floor(containerWidth / columnWidth);
     }
 
+    getContainerWidth(columnWidth, columnNumber, columnMargin) {
+        //
+        return columnNumber * (columnWidth + columnMargin);
+    }
 
     getElementsHeights(elements) {
         let numbers = [];
         for (let index = 0; index < elements.length; index++) {
             var obj1 = {
                 [index]: elements[index].clientHeight
+            };
+            numbers.push(obj1);
+        }
+        return numbers;
+    }
+
+    getElementsWidth(elements) {
+        let numbers = [];
+        for (let index = 0; index < elements.length; index++) {
+            var obj1 = {
+                [index]: elements[index].clientWidth
             };
             numbers.push(obj1);
         }

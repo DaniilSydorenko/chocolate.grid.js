@@ -2,19 +2,8 @@
 
 class Grid {
     constructor() {
-        this._quantity = 24;
-        this._cols = 12;
-        this._rows = 12;
-    }
 
-    getFullGrid() {
-        return [
-            this._cols,
-            this._rows,
-            this._quantity
-        ]
     }
-
 
     /**
      * Create grid
@@ -46,8 +35,6 @@ class Grid {
         for (var i = 0; i < nlength; i++) {
 
             for (var col in grid) { // change on "of" or "simple for"
-
-                //console.log("---> Column1: " + col);
 
                 if (grid.hasOwnProperty(col)) { // remove
                     var number = numbers.splice(0, 1)[0]; // Grab first element
@@ -124,7 +111,6 @@ class Grid {
 
         // Finally we got a grid with sorted elements
         return grid;
-
     }
 
 
@@ -153,10 +139,8 @@ class Grid {
             gridVerticalColumn.id = "col-" + i;
 
             let elements = document.getElementsByClassName('col-' + i);
-            console.log(elements);
 
             for (let e = 0; e <= elements.length; e++) {
-                console.log(elements[e]);
                 var el = elements[e];
                 gridVerticalColumn.appendChild(elements[e]);
             }
