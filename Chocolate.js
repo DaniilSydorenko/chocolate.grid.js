@@ -30,8 +30,6 @@ module.exports = class Chocolate {
 
 		this._columnUserMargin = params.columnMargin;
 
-
-
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
 
@@ -49,8 +47,8 @@ module.exports = class Chocolate {
 		var colWidth = this._columnUserWidth,
 			colMargin = this._columnUserMargin;
 
-		//window.addEventListener('load', setSize, true);
 		setSize();
+
 		window.addEventListener('resize', setSize);
 
 		function setSize(){

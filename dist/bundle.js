@@ -110,8 +110,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		var colWidth = this._columnUserWidth,
 		    colMargin = this._columnUserMargin;
 
-		//window.addEventListener('load', setSize, true);
 		setSize();
+
 		window.addEventListener('resize', setSize);
 
 		function setSize() {
@@ -272,8 +272,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 									//let gridColumn = parseInt(col) + 1;
 									//let sumWithMargin = sum + (10 * e);
 
-									elements[index].style.left = 270 * col + "px";
-									elements[index].style.top = sum + 20 * e + "px";
+									//elements[index].style.left = (270 * col) + "px";
+									//elements[index].style.top = (sum + (20 * e)) + "px";
+									elements[index].style.transform = "matrix(1, 0, 0, 1, " + 270 * col + ", " + (sum + 20 * e) + ")"; // transform: matrix(1, 0, 0, 1, 540, 0);
 									elements[index].classList.add("col-" + col);
 									//elements[index].innerHTML = "<p>Height: " + element[index] + "<br>" + " Sum: " + sum + "</p>";
 									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
@@ -314,129 +315,97 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(Grid, [{
 			key: 'createGrid',
-			value: function createGrid(numbers, columns) {
-				//var elements = document.querySelectorAll(".js-tile");
-				//var numbers = Sizes.getElementsHeights(elements);
-
-				var nlength = numbers.length;
-
-				// !!!!!!
-				//var columns = Sizes.getColumnNumber(this._containerUserWidth, this._columnUserWidth);
-
-				var grid = {};
+			value: function createGrid(elementsOfGrid, columns) {
+				var elementsCount = elementsOfGrid.length,
+				    grid = {};
 
 				// Set columns
 				for (var j = 0; j < columns; j++) {
 					grid[j] = [];
 				}
 
-				//////////////////////////////
-				/*
-     get element quantity
-     set grid
-     */
-				//////////////////////////////
+				var gridLength = Object.keys(grid).length;
 
-				// Get numbers
-				for (var i = 0; i < nlength; i++) {
+				// All magic happens here
+				for (var i = 0; i < elementsCount; i++) {
+					for (var col = 0; col < gridLength && elementsOfGrid.length > 0; col++) {
+						// Till elements array will not be empty
+						var number = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
 
-					for (var col in grid) {
-						// change on "of" or "simple for"
+						if (number) {
+							// Here start to fill columns by elements
+							if (grid[col].length === 0) {
+								grid[col].push(number); // Push element if column is empty
+							} else if (grid[col].length > 0) {
+								// if not empty should detect smallest column
+								var elementsSumStorage = []; // Store sum of heights for all counted elements
 
-						if (grid.hasOwnProperty(col)) {
-							// remove
-							var number = numbers.splice(0, 1)[0]; // Grab first element
+								for (var c = 0; c < gridLength; c++) {
+									// change on "of" or "simple for"
+									// Convert object to simple numbers for sum counting
+									var gridColumn = grid[c];
+									var properValues = [];
 
-							if (number) {
-								// ?
+									var _iteratorNormalCompletion = true;
+									var _didIteratorError = false;
+									var _iteratorError = undefined;
 
-								// Here start to fill columns by elements
-								if (grid[col].length < 1) {
-									grid[col].push(number); // Push element if column is empty
-
-									// if not empty should detect smallest column
-								} else if (grid[col].length >= 1) {
-									// Simple else ?
-
-									var allCols = []; // Count sum of heights of all former elements if column is not empty | change on CONST
-									// All const on top !!
-
-									for (var c in grid) {
-										// change on "of" or "simple for"
-
-										//console.log("---> Column2: " + c);
-
-										if (grid.hasOwnProperty(c)) {
-											// remove
-
-											var s = grid[c]; // column
-
-											// Convert object to simple numbers for sum counting
-											var properValues = []; // All const on top !!??
-
-											var _iteratorNormalCompletion = true;
-											var _didIteratorError = false;
-											var _iteratorError = undefined;
-
-											try {
-												for (var _iterator = s[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-													var forSumCol = _step.value;
-													// go thru elements
-
-													var newVal = 0; // All const on top !!?? | zero as default ???
-
-													for (var colVal in forSumCol) {
-														// change on "of" or "simple for"
-														if (forSumCol.hasOwnProperty(colVal)) {
-															//remove
-															newVal = parseInt(forSumCol[colVal]);
-														}
-													}
-
-													properValues.push(newVal);
-												}
-											} catch (err) {
-												_didIteratorError = true;
-												_iteratorError = err;
-											} finally {
-												try {
-													if (!_iteratorNormalCompletion && _iterator.return) {
-														_iterator.return();
-													}
-												} finally {
-													if (_didIteratorError) {
-														throw _iteratorError;
-													}
+									try {
+										for (var _iterator = gridColumn[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+											var forSumCol = _step.value;
+											// go thru elements
+											var newVal = false;
+											for (var colVal in forSumCol) {
+												// change on "of" or "simple for"
+												if (forSumCol.hasOwnProperty(colVal)) {
+													//remove
+													newVal = parseInt(forSumCol[colVal]);
 												}
 											}
-
-											if (properValues.length === 1) {
-												allCols.push(properValues[0]);
-											} else if (properValues.length > 1) {
-												var total = properValues.reduce(function (a, b) {
-													return a + b;
-												});
-
-												allCols.push(total);
+											if (newVal != false) {
+												properValues.push(newVal);
+											}
+										}
+									} catch (err) {
+										_didIteratorError = true;
+										_iteratorError = err;
+									} finally {
+										try {
+											if (!_iteratorNormalCompletion && _iterator.return) {
+												_iterator.return();
+											}
+										} finally {
+											if (_didIteratorError) {
+												throw _iteratorError;
 											}
 										}
 									}
 
-									// Move to separate func
-									// Get index of smallest value
-									var index = 0,
-									    // All const on top !!??
-									value = allCols[0];
-									for (var t = 1; t < allCols.length; t++) {
-										if (allCols[t] < value) {
-											value = allCols[t];
-											index = t;
-										}
-									}
+									if (properValues.length === 1) {
+										elementsSumStorage.push(properValues[0]);
+									} else if (properValues.length > 1) {
+										var total = properValues.reduce(function (a, b) {
+											return a + b;
+										});
 
-									// Insert value to the smallest column
-									grid[index].push(number);
+										elementsSumStorage.push(total);
+									}
 								}
+
+								// Move to separate func
+								// Get index of smallest value
+								var index = 0,
+								    // All const on top !!??
+								value = elementsSumStorage[0];
+								for (var t = 1; t < elementsSumStorage.length; t++) {
+									if (elementsSumStorage[t] < value) {
+										value = elementsSumStorage[t];
+										index = t;
+									}
+								}
+
+								// Insert value to the smallest column
+								grid[index].push(number);
 							}
 						}
 					}
@@ -444,20 +413,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// Finally we got a grid with sorted elements
 				return grid;
-			}
-		}, {
-			key: 'getMultiGrid',
-			value: function getMultiGrid() {
-				return this.grid.filter(function (i) {
-					return i < 20;
-				});
-			}
-		}, {
-			key: 'getMultiGrid2',
-			value: function getMultiGrid2() {
-				return this.grid.map(function (i) {
-					return i * 2;
-				});
 			}
 		}, {
 			key: 'setGridColumns',
