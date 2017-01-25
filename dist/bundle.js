@@ -72,6 +72,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Sizes = __webpack_require__(2);
 	var Styles = __webpack_require__(3);
 	var Grid = __webpack_require__(4);
+	var Main = __webpack_require__(5);
 
 	module.exports = function Chocolate(params) {
 		_classCallCheck(this, Chocolate);
@@ -441,6 +442,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	module.exports = new Grid();
+
+	/***/
+},
+/* 5 */
+/***/function (module, exports) {
+
+	'use strict';
+
+	var Main = function Main() {
+		_classCallCheck(this, Main);
+	};
 
 	/***/
 }

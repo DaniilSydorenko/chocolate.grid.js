@@ -1,4 +1,4 @@
 'use strict';
 
-window.Chocolate = require('./Chocolate.js');
+window.Chocolate = require('./app/Chocolate.js');
 

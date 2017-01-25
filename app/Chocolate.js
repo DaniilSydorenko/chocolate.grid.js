@@ -3,10 +3,10 @@
 /**
  * Dependencies
  */
-var Sizes = require('./app/sizes/Sizes');
-var Styles = require('./app/styles/Styles');
-var Grid = require('./app/grid/Grid');
-var Main = require('./app/main/Main');
+var Sizes = require('./sizes/Sizes');
+var Styles = require('./styles/Styles');
+var Grid = require('./grid/Grid');
+var Main = require('./main/Main');
 
 module.exports = class Chocolate {
 
