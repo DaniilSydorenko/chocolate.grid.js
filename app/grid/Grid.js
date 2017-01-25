@@ -2,15 +2,15 @@
 
 class Grid {
 	/**
-	 * Get every element with index and height and return array of heights for every column
+	 * Get every element{index:height} and return array of heights for every column
 	 *
 	 * @param column
 	 */
 	getMapOfHeightsForEveryColumn(column) {
 		let mapOfHeights = [];
-		for (var forSumCol of column) {
-			let index = Object.keys(forSumCol)[0];
-			mapOfHeights.push(parseInt(index));
+		for (var indexHeight of column) {
+			let index = Object.keys(indexHeight)[0];
+			mapOfHeights.push(parseInt(indexHeight[index]));
 		}
 
 		return mapOfHeights;
@@ -55,10 +55,10 @@ class Grid {
 		for (var i = 0; i < elementsCount; i++) {
 			for (var col = 0; col < gridLength && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
 				var elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
-
 				if (elementOfGrid) { // Here start to fill columns by elements
 					if (grid[col].length === 0) {
 						grid[col].push(elementOfGrid); // Push element if column is empty
+
 					} else if (grid[col].length > 0) { // if not empty should detect smallest column
 						var elementsSumStorage = []; // Store sum of heights for all counted elements
 
@@ -67,6 +67,7 @@ class Grid {
 
 							if (mapOfHeights.length === 1) {
 								elementsSumStorage.push(mapOfHeights[0]);
+
 							} else if (mapOfHeights.length > 1) {
 								var total = mapOfHeights.reduce(function (a, b) {
 									return a + b;

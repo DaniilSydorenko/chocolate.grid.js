@@ -336,10 +336,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				try {
 					for (var _iterator = column[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-						var forSumCol = _step.value;
+						var indexHeight = _step.value;
 
-						var index = Object.keys(forSumCol)[0];
-						mapOfHeights.push(parseInt(index));
+						var index = Object.keys(indexHeight)[0];
+						mapOfHeights.push(parseInt(indexHeight[index]));
 					}
 				} catch (err) {
 					_didIteratorError = true;
@@ -405,7 +405,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					for (var col = 0; col < gridLength && elementsOfGrid.length > 0; col++) {
 						// Till elements array will not be empty
 						var elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
-
 						if (elementOfGrid) {
 							// Here start to fill columns by elements
 							if (grid[col].length === 0) {
