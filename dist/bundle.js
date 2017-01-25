@@ -309,11 +309,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		/**
-   * Create grid
+   * Return index of column with smallest sum
    */
 
 
 		_createClass(Grid, [{
+			key: 'getIndexOfSmallestColumn',
+			value: function getIndexOfSmallestColumn(storage) {
+				var i = 0;
+				var v = storage[0];
+
+				for (var t = 1; t < storage.length; t++) {
+					if (storage[t] < v) {
+						v = storage[t];
+						i = t;
+					}
+				}
+
+				return i;
+			}
+
+			/**
+    * Create grid
+    * @TODO Make it more easier
+    */
+
+		}, {
 			key: 'createGrid',
 			value: function createGrid(elementsOfGrid, columns) {
 				var elementsCount = elementsOfGrid.length,
@@ -353,12 +374,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 									try {
 										for (var _iterator = gridColumn[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 											var forSumCol = _step.value;
-											// go thru elements
+											// Get every element(object{index:height})
 											var newVal = false;
 											for (var colVal in forSumCol) {
-												// change on "of" or "simple for"
 												if (forSumCol.hasOwnProperty(colVal)) {
-													//remove
 													newVal = parseInt(forSumCol[colVal]);
 												}
 											}
@@ -387,32 +406,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 										var total = properValues.reduce(function (a, b) {
 											return a + b;
 										});
-
-										elementsSumStorage.push(total);
+										if (total != false) {
+											elementsSumStorage.push(total);
+										}
 									}
 								}
 
-								// Move to separate func
-								// Get index of smallest value
-								var index = 0,
-								    // All const on top !!??
-								value = elementsSumStorage[0];
-								for (var t = 1; t < elementsSumStorage.length; t++) {
-									if (elementsSumStorage[t] < value) {
-										value = elementsSumStorage[t];
-										index = t;
-									}
-								}
-
-								// Insert value to the smallest column
-								grid[index].push(number);
+								var indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
+								console.log(indexOfSmallestColumn);
+								grid[indexOfSmallestColumn].push(number); // Insert value to the smallest column
 							}
 						}
 					}
 				}
 
-				// Finally we got a grid with sorted elements
-				return grid;
+				return grid; // Finally we got a grid with sorted elements
 			}
 		}, {
 			key: 'setGridColumns',

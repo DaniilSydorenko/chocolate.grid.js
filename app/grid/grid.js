@@ -6,7 +6,25 @@ class Grid {
 	}
 
 	/**
+	 * Return index of column with smallest sum
+	 */
+	getIndexOfSmallestColumn(storage) {
+		let i = 0;
+		let	v = storage[0];
+
+		for (let t = 1; t < storage.length; t++) {
+			if (storage[t] < v) {
+				v = storage[t];
+				i = t;
+			}
+		}
+
+		return i;
+	}
+
+	/**
 	 * Create grid
+	 * @TODO Make it more easier
 	 */
 	createGrid(elementsOfGrid, columns) {
 		var elementsCount = elementsOfGrid.length,
@@ -59,17 +77,8 @@ class Grid {
 							}
 						}
 
-						// Get index of smallest value
-						var index = 0,
-							value = elementsSumStorage[0];
-						for (let t = 1; t < elementsSumStorage.length; t++) {
-							if (elementsSumStorage[t] < value) {
-								value = elementsSumStorage[t];
-								index = t;
-							}
-						}
-
-						grid[index].push(number); // Insert value to the smallest column
+						let indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
+						grid[indexOfSmallestColumn].push(number); // Insert value to the smallest column
 					}
 				}
 			}
