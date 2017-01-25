@@ -6,12 +6,27 @@ class Grid {
 	}
 
 	/**
+	 * Get every element with index and height and return array of heights for every column
+	 * @param column
+	 * @param storage
+	 */
+	getMapOfHeightsForEveryColumn(column) {
+		let mapOfHeights = [];
+		for (var forSumCol of column) {
+			let index = Object.keys(forSumCol)[0];
+			mapOfHeights.push(parseInt(index));
+		}
+
+		return mapOfHeights;
+	}
+
+	/**
 	 * Return index of column with smallest sum
+	 * @param storage
 	 */
 	getIndexOfSmallestColumn(storage) {
 		let i = 0;
 		let	v = storage[0];
-
 		for (let t = 1; t < storage.length; t++) {
 			if (storage[t] < v) {
 				v = storage[t];
@@ -21,6 +36,8 @@ class Grid {
 
 		return i;
 	}
+
+
 
 	/**
 	 * Create grid
@@ -48,32 +65,17 @@ class Grid {
 					} else if (grid[col].length > 0) { // if not empty should detect smallest column
 						var elementsSumStorage = []; // Store sum of heights for all counted elements
 
-						for (var c = 0; c < gridLength; c++) { // change on "of" or "simple for"
+						for (var c = 0; c < gridLength; c++) {
 							// Convert object to simple numbers for sum counting
-							let gridColumn = grid[c];
-							let properValues = [];
+							let mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c]);
 
-							for (var forSumCol of gridColumn) { // Get every element(object{index:height})
-								let newVal = false;
-								for (var colVal in forSumCol) {
-									if (forSumCol.hasOwnProperty(colVal)) {
-										newVal = parseInt(forSumCol[colVal]);
-									}
-								}
-								if (newVal != false) {
-									properValues.push(newVal);
-								}
-							}
-
-							if (properValues.length === 1) {
-								elementsSumStorage.push(properValues[0]);
-							} else if (properValues.length > 1) {
-								var total = properValues.reduce(function (a, b) {
+							if (mapOfHeights.length === 1) {
+								elementsSumStorage.push(mapOfHeights[0]);
+							} else if (mapOfHeights.length > 1) {
+								var total = mapOfHeights.reduce(function (a, b) {
 									return a + b;
 								});
-								if (total != false) {
-									elementsSumStorage.push(total);
-								}
+								elementsSumStorage.push(total);
 							}
 						}
 
@@ -87,28 +89,6 @@ class Grid {
 		return grid; // Finally we got a grid with sorted elements
 	}
 
-
-	setGridColumns() {
-		let gridContainer = document.querySelector('.js-chocolate');
-
-		for (let i = 0; i < 3; i++) {
-
-			// Create grid columns
-			var gridVerticalColumn = document.createElement('div');
-			gridVerticalColumn.id = "col-" + i;
-
-			let elements = document.getElementsByClassName('col-' + i);
-
-			for (let e = 0; e <= elements.length; e++) {
-				var el = elements[e];
-				gridVerticalColumn.appendChild(elements[e]);
-			}
-
-			gridContainer.appendChild(gridVerticalColumn);
-
-		}
-
-	}
 }
 
 module.exports = new Grid();

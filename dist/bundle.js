@@ -309,16 +309,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		/**
-   * Return index of column with smallest sum
+   * Get every element with index and height and return array of heights for every column
+   * @param column
+   * @param storage
    */
 
 
 		_createClass(Grid, [{
+			key: 'getMapOfHeightsForEveryColumn',
+			value: function getMapOfHeightsForEveryColumn(column) {
+				var mapOfHeights = [];
+				var _iteratorNormalCompletion = true;
+				var _didIteratorError = false;
+				var _iteratorError = undefined;
+
+				try {
+					for (var _iterator = column[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+						var forSumCol = _step.value;
+
+						var index = Object.keys(forSumCol)[0];
+						mapOfHeights.push(parseInt(index));
+					}
+				} catch (err) {
+					_didIteratorError = true;
+					_iteratorError = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion && _iterator.return) {
+							_iterator.return();
+						}
+					} finally {
+						if (_didIteratorError) {
+							throw _iteratorError;
+						}
+					}
+				}
+
+				return mapOfHeights;
+			}
+
+			/**
+    * Return index of column with smallest sum
+    * @param storage
+    */
+
+		}, {
 			key: 'getIndexOfSmallestColumn',
 			value: function getIndexOfSmallestColumn(storage) {
 				var i = 0;
 				var v = storage[0];
-
 				for (var t = 1; t < storage.length; t++) {
 					if (storage[t] < v) {
 						v = storage[t];
@@ -362,58 +401,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								var elementsSumStorage = []; // Store sum of heights for all counted elements
 
 								for (var c = 0; c < gridLength; c++) {
-									// change on "of" or "simple for"
 									// Convert object to simple numbers for sum counting
-									var gridColumn = grid[c];
-									var properValues = [];
+									var mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c]);
 
-									var _iteratorNormalCompletion = true;
-									var _didIteratorError = false;
-									var _iteratorError = undefined;
-
-									try {
-										for (var _iterator = gridColumn[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-											var forSumCol = _step.value;
-											// Get every element(object{index:height})
-											var newVal = false;
-											for (var colVal in forSumCol) {
-												if (forSumCol.hasOwnProperty(colVal)) {
-													newVal = parseInt(forSumCol[colVal]);
-												}
-											}
-											if (newVal != false) {
-												properValues.push(newVal);
-											}
-										}
-									} catch (err) {
-										_didIteratorError = true;
-										_iteratorError = err;
-									} finally {
-										try {
-											if (!_iteratorNormalCompletion && _iterator.return) {
-												_iterator.return();
-											}
-										} finally {
-											if (_didIteratorError) {
-												throw _iteratorError;
-											}
-										}
-									}
-
-									if (properValues.length === 1) {
-										elementsSumStorage.push(properValues[0]);
-									} else if (properValues.length > 1) {
-										var total = properValues.reduce(function (a, b) {
+									if (mapOfHeights.length === 1) {
+										elementsSumStorage.push(mapOfHeights[0]);
+									} else if (mapOfHeights.length > 1) {
+										var total = mapOfHeights.reduce(function (a, b) {
 											return a + b;
 										});
-										if (total != false) {
-											elementsSumStorage.push(total);
-										}
+										elementsSumStorage.push(total);
 									}
 								}
 
 								var indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
-								console.log(indexOfSmallestColumn);
 								grid[indexOfSmallestColumn].push(number); // Insert value to the smallest column
 							}
 						}
@@ -421,27 +422,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				return grid; // Finally we got a grid with sorted elements
-			}
-		}, {
-			key: 'setGridColumns',
-			value: function setGridColumns() {
-				var gridContainer = document.querySelector('.js-chocolate');
-
-				for (var i = 0; i < 3; i++) {
-
-					// Create grid columns
-					var gridVerticalColumn = document.createElement('div');
-					gridVerticalColumn.id = "col-" + i;
-
-					var _elements = document.getElementsByClassName('col-' + i);
-
-					for (var e = 0; e <= _elements.length; e++) {
-						var el = _elements[e];
-						gridVerticalColumn.appendChild(_elements[e]);
-					}
-
-					gridContainer.appendChild(gridVerticalColumn);
-				}
 			}
 		}]);
 
