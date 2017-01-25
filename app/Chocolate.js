@@ -11,38 +11,28 @@ var Main = require('./main/Main');
 module.exports = class Chocolate {
 
 	constructor(params) {
-
 		var elements = document.querySelectorAll(".js-tile");
-		var element = document.querySelector(".js-tile");
 		let gridContainer = document.querySelector('.js-chocolate');
 
+		Sizes.setElementsHeight(elements);
 
-		var elementsIMG = document.querySelectorAll(".js-tile");
-		Sizes.setElementsHeight(elementsIMG);
-
+		// Set grid, params, etc
+		// Set number of columns and container width
 		this._containerSelector = params.containerSelector;
 		this._tileSelector = params.tileSelector;
-
-        // Set grid, params, etc
-        // Set number of columns and container width
-        this._columnUserWidth = params.columnWidth;
-        //this._containerUserWidth = params.containerWidth;
-
+		this._columnUserWidth = params.columnWidth;
+		//this._containerUserWidth = params.containerWidth;
 		this._columnUserMargin = params.columnMargin;
-
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
 
 		let numbers = Sizes.getElementsHeights(elements);
 		let columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
-
 		let grid = Grid.createGrid(numbers, columns);
-
 		let containerFullWidth = Sizes.getContainerWidth(this._columnUserWidth, columns, this._columnUserMargin);
 
 		// Init style
-		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth -20);
-
+		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth - this._columnUserMargin); // Minus last right margin
 
 		var colWidth = this._columnUserWidth,
 			colMargin = this._columnUserMargin;
@@ -51,13 +41,10 @@ module.exports = class Chocolate {
 
 		window.addEventListener('resize', setSize);
 
-		function setSize(){
+		function setSize() {
 			let containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
 			if (window.innerWidth <= containerWidth) {
-				// recounting
-				console.log(containerWidth);
-
 				// Get new columns number because window width is only one important
 				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
 

@@ -78,34 +78,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_classCallCheck(this, Chocolate);
 
 		var elements = document.querySelectorAll(".js-tile");
-		var element = document.querySelector(".js-tile");
 		var gridContainer = document.querySelector('.js-chocolate');
 
-		var elementsIMG = document.querySelectorAll(".js-tile");
-		Sizes.setElementsHeight(elementsIMG);
-
-		this._containerSelector = params.containerSelector;
-		this._tileSelector = params.tileSelector;
+		Sizes.setElementsHeight(elements);
 
 		// Set grid, params, etc
 		// Set number of columns and container width
+		this._containerSelector = params.containerSelector;
+		this._tileSelector = params.tileSelector;
 		this._columnUserWidth = params.columnWidth;
 		//this._containerUserWidth = params.containerWidth;
-
 		this._columnUserMargin = params.columnMargin;
-
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
 
 		var numbers = Sizes.getElementsHeights(elements);
 		var columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
-
 		var grid = Grid.createGrid(numbers, columns);
-
 		var containerFullWidth = Sizes.getContainerWidth(this._columnUserWidth, columns, this._columnUserMargin);
 
 		// Init style
-		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth - 20);
+		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth - this._columnUserMargin); // Minus last right margin
 
 		var colWidth = this._columnUserWidth,
 		    colMargin = this._columnUserMargin;
@@ -118,9 +111,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			var containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
 			if (window.innerWidth <= containerWidth) {
-				// recounting
-				console.log(containerWidth);
-
 				// Get new columns number because window width is only one important
 				var _columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
 
@@ -260,7 +250,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_createClass(Styles, [{
 			key: 'setStyleToItems',
 			value: function setStyleToItems(grid, elements, container, containerFullWidth) {
-
 				for (var col in grid) {
 
 					if (grid.hasOwnProperty(col)) {
@@ -272,17 +261,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							var element = column[e];
 
 							for (var index in element) {
-
 								if (element.hasOwnProperty(index)) {
-									//console.log("Column: " + col + " Index: " + index + " and value: " + element[index] + " SUM: " + sum);
-
 									//let gridColumn = parseInt(col) + 1;
 									//let sumWithMargin = sum + (10 * e);
 
 									//elements[index].style.left = (270 * col) + "px";
 									//elements[index].style.top = (sum + (20 * e)) + "px";
+
 									elements[index].style.transform = "matrix(1, 0, 0, 1, " + 270 * col + ", " + (sum + 20 * e) + ")"; // transform: matrix(1, 0, 0, 1, 540, 0);
 									elements[index].classList.add("col-" + col);
+
 									//elements[index].innerHTML = "<p>Height: " + element[index] + "<br>" + " Sum: " + sum + "</p>";
 									//elements[index].style.transform = "translate(" + (100 * col) + "%" + "," + (sum + (10*e))+ "px)";
 
@@ -324,7 +312,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'getMapOfHeightsForEveryColumn',
 
 			/**
-    * Get every element with index and height and return array of heights for every column
+    * Get every element{index:height} and return array of heights for every column
     *
     * @param column
     */
