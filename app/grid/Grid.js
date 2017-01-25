@@ -1,14 +1,10 @@
 'use strict';
 
 class Grid {
-	constructor() {
-
-	}
-
 	/**
 	 * Get every element with index and height and return array of heights for every column
+	 *
 	 * @param column
-	 * @param storage
 	 */
 	getMapOfHeightsForEveryColumn(column) {
 		let mapOfHeights = [];
@@ -22,6 +18,7 @@ class Grid {
 
 	/**
 	 * Return index of column with smallest sum
+	 *
 	 * @param storage
 	 */
 	getIndexOfSmallestColumn(storage) {
@@ -37,36 +34,35 @@ class Grid {
 		return i;
 	}
 
-
-
 	/**
-	 * Create grid
-	 * @TODO Make it more easier
+	 * Make me magic here please and create grid :)
+	 *
+	 * @param elementsOfGrid
+	 * @param columns
+	 * @returns {{}}
 	 */
 	createGrid(elementsOfGrid, columns) {
 		var elementsCount = elementsOfGrid.length,
 			grid = {};
 
-		// Set columns
+		// Set columns amount
 		for (var j = 0; j < columns; j++) {
 			grid[j] = [];
 		}
 
 		var gridLength = Object.keys(grid).length;
 
-		// All magic happens here
 		for (var i = 0; i < elementsCount; i++) {
 			for (var col = 0; col < gridLength && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
-				var number = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
+				var elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
 
-				if (number) { // Here start to fill columns by elements
+				if (elementOfGrid) { // Here start to fill columns by elements
 					if (grid[col].length === 0) {
-						grid[col].push(number); // Push element if column is empty
+						grid[col].push(elementOfGrid); // Push element if column is empty
 					} else if (grid[col].length > 0) { // if not empty should detect smallest column
 						var elementsSumStorage = []; // Store sum of heights for all counted elements
 
 						for (var c = 0; c < gridLength; c++) {
-							// Convert object to simple numbers for sum counting
 							let mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c]);
 
 							if (mapOfHeights.length === 1) {
@@ -80,7 +76,7 @@ class Grid {
 						}
 
 						let indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
-						grid[indexOfSmallestColumn].push(number); // Insert value to the smallest column
+						grid[indexOfSmallestColumn].push(elementOfGrid); // Insert value to the smallest column
 					}
 				}
 			}

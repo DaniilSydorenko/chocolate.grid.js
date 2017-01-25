@@ -72,7 +72,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Sizes = __webpack_require__(2);
 	var Styles = __webpack_require__(3);
 	var Grid = __webpack_require__(4);
-	var Colors = __webpack_require__(5);
 
 	module.exports = function Chocolate(params) {
 		_classCallCheck(this, Chocolate);
@@ -245,9 +244,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 },
 /* 3 */
 /***/function (module, exports) {
+
+	'use strict';
+
 	var Styles = function () {
 		function Styles() {
 			_classCallCheck(this, Styles);
+
+			this._blue = "#cbd0e1";
+			this._green = "#d1f313";
+			this._red = "#ff0000";
 		}
 
 		_createClass(Styles, [{
@@ -289,6 +295,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				container.style.height = sum + 'px';
 				container.style.width = containerFullWidth + 'px';
 			}
+		}, {
+			key: 'colors',
+			get: function get() {
+				return [this._blue, this._green, this._red];
+			}
 		}]);
 
 		return Styles;
@@ -308,15 +319,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_classCallCheck(this, Grid);
 		}
 
-		/**
-   * Get every element with index and height and return array of heights for every column
-   * @param column
-   * @param storage
-   */
-
-
 		_createClass(Grid, [{
 			key: 'getMapOfHeightsForEveryColumn',
+
+			/**
+    * Get every element with index and height and return array of heights for every column
+    *
+    * @param column
+    */
 			value: function getMapOfHeightsForEveryColumn(column) {
 				var mapOfHeights = [];
 				var _iteratorNormalCompletion = true;
@@ -350,6 +360,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			/**
     * Return index of column with smallest sum
+    *
     * @param storage
     */
 
@@ -369,8 +380,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 
 			/**
-    * Create grid
-    * @TODO Make it more easier
+    * Make me magic here please and create grid :)
+    *
+    * @param elementsOfGrid
+    * @param columns
+    * @returns {{}}
     */
 
 		}, {
@@ -379,29 +393,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var elementsCount = elementsOfGrid.length,
 				    grid = {};
 
-				// Set columns
+				// Set columns amount
 				for (var j = 0; j < columns; j++) {
 					grid[j] = [];
 				}
 
 				var gridLength = Object.keys(grid).length;
 
-				// All magic happens here
 				for (var i = 0; i < elementsCount; i++) {
 					for (var col = 0; col < gridLength && elementsOfGrid.length > 0; col++) {
 						// Till elements array will not be empty
-						var number = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
+						var elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
 
-						if (number) {
+						if (elementOfGrid) {
 							// Here start to fill columns by elements
 							if (grid[col].length === 0) {
-								grid[col].push(number); // Push element if column is empty
+								grid[col].push(elementOfGrid); // Push element if column is empty
 							} else if (grid[col].length > 0) {
 								// if not empty should detect smallest column
 								var elementsSumStorage = []; // Store sum of heights for all counted elements
 
 								for (var c = 0; c < gridLength; c++) {
-									// Convert object to simple numbers for sum counting
 									var mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c]);
 
 									if (mapOfHeights.length === 1) {
@@ -415,7 +427,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 								}
 
 								var indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
-								grid[indexOfSmallestColumn].push(number); // Insert value to the smallest column
+								grid[indexOfSmallestColumn].push(elementOfGrid); // Insert value to the smallest column
 							}
 						}
 					}
@@ -429,31 +441,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	module.exports = new Grid();
-
-	/***/
-},
-/* 5 */
-/***/function (module, exports) {
-	var Colors = function () {
-		function Colors() {
-			_classCallCheck(this, Colors);
-
-			this._blue = "#cbd0e1";
-			this._green = "#d1f313";
-			this._red = "#ff0000";
-		}
-
-		_createClass(Colors, [{
-			key: 'colors',
-			get: function get() {
-				return [this._blue, this._green, this._red];
-			}
-		}]);
-
-		return Colors;
-	}();
-
-	module.exports = new Colors();
 
 	/***/
 }
