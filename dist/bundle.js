@@ -110,37 +110,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function setSize() {
 			var containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
-			if (window.innerWidth <= containerWidth) {
-				// Get new columns number because window width is only one important
-				var _columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
+			function reCounting() {
+				var columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
+				var numbers = Sizes.getElementsHeights(elements);
+				var grid = Grid.createGrid(numbers, columns);
+				var containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
 
-				var _numbers = Sizes.getElementsHeights(elements);
-
-				var _grid = Grid.createGrid(_numbers, _columns);
-
-				var _containerFullWidth = Sizes.getContainerWidth(colWidth, _columns, colMargin) - 20;
-
-				//console.log(columns);
-				//console.log(containerFullWidth);
-
-				Styles.setStyleToItems(_grid, elements, gridContainer, _containerFullWidth);
-			} else if (window.innerWidth <= 1400) {
-				// maxWidth instead 1400px
-				var _columns2 = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
-
-				var _numbers2 = Sizes.getElementsHeights(elements);
-
-				var _grid2 = Grid.createGrid(_numbers2, _columns2);
-
-				var _containerFullWidth2 = Sizes.getContainerWidth(colWidth, _columns2, colMargin) - 20;
-
-				//console.log(columns);
-				//console.log(containerFullWidth);
-
-				Styles.setStyleToItems(_grid2, elements, gridContainer, _containerFullWidth2);
+				return {
+					'columns': columns,
+					'numbers': numbers,
+					'grid': grid,
+					'containerFullWidth': containerFullWidth
+				};
 			}
 
-			// pass new value of container and set new styles
+			if (window.innerWidth <= containerWidth) {
+				// Get new columns number because window width is only one important
+				var data = reCounting();
+				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
+			} else if (window.innerWidth <= 1400) {
+				// maxWidth instead 1400px
+				var _data = reCounting();
+				Styles.setStyleToItems(_data.grid, elements, gridContainer, _data.containerFullWidth);
+			}
 		}
 
 		//@TODO:
@@ -281,7 +273,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 				}
 
-				container.style.height = sum + 'px';
+				container.style.height = sum + 'px'; // Height??
 				container.style.width = containerFullWidth + 'px';
 			}
 		}, {

@@ -44,37 +44,30 @@ module.exports = class Chocolate {
 		function setSize() {
 			let containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
-			if (window.innerWidth <= containerWidth) {
-				// Get new columns number because window width is only one important
+			function reCounting() {
 				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
-
 				let numbers = Sizes.getElementsHeights(elements);
-
 				let grid = Grid.createGrid(numbers, columns);
-
 				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
 
-				//console.log(columns);
-				//console.log(containerFullWidth);
-
-				Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth);
-
-			} else if (window.innerWidth <= 1400) { // maxWidth instead 1400px
-				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
-
-				let numbers = Sizes.getElementsHeights(elements);
-
-				let grid = Grid.createGrid(numbers, columns);
-
-				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
-
-				//console.log(columns);
-				//console.log(containerFullWidth);
-
-				Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth);
+				return {
+					'columns': columns,
+					'numbers': numbers,
+					'grid': grid,
+					'containerFullWidth': containerFullWidth
+				};
 			}
 
-			// pass new value of container and set new styles
+			if (window.innerWidth <= containerWidth) {
+				// Get new columns number because window width is only one important
+				let data = reCounting();
+				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
+
+			} else if (window.innerWidth <= 1400) { // maxWidth instead 1400px
+				let data = reCounting();
+				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
+			}
+
 		}
 
 		//@TODO:
