@@ -1,7 +1,15 @@
 'use strict';
 
 class Main {
-	constructor() {
+	run() {
+
+	}
+
+	setListeners() {
+
+	}
+
+	resizeContainer() {
 
 	}
 

@@ -13,12 +13,21 @@ module.exports = class Chocolate {
 	constructor(params) {
 
 		/*
+			Main.run({
+				width: --
+				margin: ---
+			})
+
+		 */
+
+		/*
 		 Available params:
 		 containerSelector
-		 containerMaxWidth(no)
+		 containerMaxWidth
 		 tileSelector --->itemSelector
 		 columnWidth
 		 columnMargin
+		 fullScreen(?)
 		 */
 
 		var elements = document.querySelectorAll(".js-tile");
@@ -54,7 +63,6 @@ module.exports = class Chocolate {
 		window.addEventListener('resize', setSize);
 
 		function setSize() {
-			let containerWidth = document.querySelector('.js-chocolate').clientWidth;
 
 			function reCounting() {
 				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
