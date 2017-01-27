@@ -11,6 +11,16 @@ var Main = require('./main/Main');
 module.exports = class Chocolate {
 
 	constructor(params) {
+
+		/*
+		 Available params:
+		 containerSelector
+		 containerMaxWidth(no)
+		 tileSelector --->itemSelector
+		 columnWidth
+		 columnMargin
+		 */
+
 		var elements = document.querySelectorAll(".js-tile");
 		let gridContainer = document.querySelector('.js-chocolate');
 
@@ -25,6 +35,7 @@ module.exports = class Chocolate {
 		this._columnUserMargin = params.columnMargin;
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
+		this._containerUserMaxWidth = params.containerMaxWidth;
 
 		let numbers = Sizes.getElementsHeights(elements);
 		let columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
@@ -35,7 +46,8 @@ module.exports = class Chocolate {
 		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth - this._columnUserMargin); // Minus last right margin
 
 		var colWidth = this._columnUserWidth,
-			colMargin = this._columnUserMargin;
+			colMargin = this._columnUserMargin,
+			maxWidth = this._containerUserMaxWidth;
 
 		setSize();
 
@@ -48,7 +60,7 @@ module.exports = class Chocolate {
 				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
 				let numbers = Sizes.getElementsHeights(elements);
 				let grid = Grid.createGrid(numbers, columns);
-				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - 20;
+				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin) - colMargin;
 
 				return {
 					'columns': columns,
@@ -58,12 +70,8 @@ module.exports = class Chocolate {
 				};
 			}
 
-			if (window.innerWidth <= containerWidth) {
+			if (window.innerWidth <= maxWidth) {
 				// Get new columns number because window width is only one important
-				let data = reCounting();
-				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
-
-			} else if (window.innerWidth <= 1400) { // maxWidth instead 1400px
 				let data = reCounting();
 				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
 			}

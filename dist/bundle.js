@@ -77,6 +77,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	module.exports = function Chocolate(params) {
 		_classCallCheck(this, Chocolate);
 
+		/*
+   Available params:
+   containerSelector
+   containerMaxWidth(no)
+   tileSelector --->itemSelector
+   columnWidth
+   columnMargin
+   */
+
 		var elements = document.querySelectorAll(".js-tile");
 		var gridContainer = document.querySelector('.js-chocolate');
 
@@ -91,6 +100,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		this._columnUserMargin = params.columnMargin;
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
+		this._containerUserMaxWidth = params.containerMaxWidth;
 
 		var numbers = Sizes.getElementsHeights(elements);
 		var columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
@@ -101,7 +111,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		Styles.setStyleToItems(grid, elements, gridContainer, containerFullWidth - this._columnUserMargin); // Minus last right margin
 
 		var colWidth = this._columnUserWidth,
-		    colMargin = this._columnUserMargin;
+		    colMargin = this._columnUserMargin,
+		    maxWidth = this._containerUserMaxWidth;
 
 		setSize();
 
@@ -124,14 +135,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				};
 			}
 
-			if (window.innerWidth <= containerWidth) {
+			if (window.innerWidth <= maxWidth) {
 				// Get new columns number because window width is only one important
 				var data = reCounting();
 				Styles.setStyleToItems(data.grid, elements, gridContainer, data.containerFullWidth);
-			} else if (window.innerWidth <= 1400) {
-				// maxWidth instead 1400px
-				var _data = reCounting();
-				Styles.setStyleToItems(_data.grid, elements, gridContainer, _data.containerFullWidth);
 			}
 		}
 
