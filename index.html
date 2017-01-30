@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<div id="chocolate" class="js-chocolate">
+<div id="js-chocolate" class="js-chocolate">
     <div class="js-tile" style="height: 370px;">
         <!--<figure class="tile-content"><img src="assets/img/sw_1.jpg"></figure>-->
     </div>
@@ -153,9 +153,9 @@
      * @type {Chocolate}
      */
     var chocolate = new Chocolate({
-        containerSelector: 'js-chocolate',
+        containerSelector: '.js-chocolate',
         containerMaxWidth: 1400,
-        tileSelector: 'js-tile',
+        itemSelector: '.js-tile',
         columnWidth: 250,
         columnMargin: 20
     });

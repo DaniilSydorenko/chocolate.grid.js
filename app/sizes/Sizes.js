@@ -36,11 +36,11 @@ class Sizes {
     }
 
     getContainerWidth(columnWidth, columnNumber, columnMargin) {
-        //
-        return columnNumber * (columnWidth + columnMargin);
+        // Minus last right margin
+        return columnNumber * (columnWidth + columnMargin) - columnMargin;
     }
 
-    getElementsHeights(elements) {
+    getHeightOfElements(elements) {
         let numbers = [];
         for (let index = 0; index < elements.length; index++) {
             var obj1 = {
