@@ -13,46 +13,6 @@ module.exports = class Chocolate {
 
 	constructor(params) {
 
-		// Selector checking: string, length,
-		// Sperva :
-		//params.hasOwnProperty('containerSelector');
-		//if (typeof params.containerSelector === "string") {
-		//	if (params.containerSelector.length > 0) {
-		//
-		//	}
-		//}
-
-		/*
-			Main.run({
-				width: --
-				margin: ---
-			})
-		 */
-
-		/*
-			 Available params:
-			 containerSelector
-			 containerMaxWidth
-			 itemSelector --->itemSelector
-			 columnWidth
-			 columnMargin
-			 fullScreen(?)
-		 */
-
-		//var userFeed = new Instafeed({
-		//	get: 'user',
-		//	userId: 1704058022,
-		//	accessToken: '1704058022.bc0a4c1.39e93bdc2ef0467c87ac170cc2a3f9ac',
-		//	resolution: 'low_resolution',
-		//	target: 'js-chocolate',
-		//	template: '<div id="instagram" class="js-tile"><img src="{{image}}" class="instagram-img" /></div>',
-		//	success: function(data) {
-		//		console.log(data);
-		//	}
-		//});
-		//
-		//userFeed.run();
-
 		var elements = document.querySelectorAll(".js-tile");
 		let gridContainer = document.querySelector('.js-chocolate');
 
