@@ -7,20 +7,11 @@ var Sizes = require('../sizes/Sizes');
 var Grid = require('../grid/Grid');
 
 class Styles {
-	constructor() {
-		this._blue = "#cbd0e1";
-		this._green = "#d1f313";
-		this._red = "#ff0000";
-	}
 
-	colors() {
-		return [
-			this._blue,
-			this._green,
-			this._red
-		];
-	}
-
+	/**
+	 *
+	 * @param params
+	 */
 	replaceItems(params) {
 		// Get grid
 		var grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
@@ -33,7 +24,7 @@ class Styles {
 			if (grid.hasOwnProperty(col)) {
 				var column = grid[col];
 				var sum = 0;
-				var mapOfSums = [];
+				var mapOfSums = []; // For TEST
 
 				for (let e = 0; e < column.length; e++) {
 					var item = column[e];
@@ -54,7 +45,8 @@ class Styles {
 			}
 		}
 
-		console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
+		//console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
+
 		container.style.height = sum + 'px'; // Height??
 		container.style.width = params.containerFullWidth + 'px';
 	}

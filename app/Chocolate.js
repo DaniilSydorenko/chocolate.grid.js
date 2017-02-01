@@ -13,6 +13,8 @@ module.exports = class Chocolate {
 
 	constructor(params) {
 
+
+
 		var elements = document.querySelectorAll(".js-tile");
 		let gridContainer = document.querySelector('.js-chocolate');
 
@@ -21,7 +23,6 @@ module.exports = class Chocolate {
 		this._containerSelector = params.containerSelector;
 		this._itemSelector = params.itemSelector;
 		this._columnUserWidth = params.columnWidth;
-		//this._containerUserWidth = params.containerWidth;
 		this._columnUserMargin = params.columnMargin;
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
@@ -43,41 +44,34 @@ module.exports = class Chocolate {
 
 		var colWidth = this._columnUserWidth,
 			colMargin = this._columnUserMargin,
-			maxWidth = this._containerUserMaxWidth;
+			containerSelector = this._containerSelector,
+			maxWidth = this._containerUserMaxWidth,
+			itemSelector = this._itemSelector;
 
+
+		// *********** Resize *********** //
 		setSize();
 
 		window.addEventListener('resize', setSize);
 
 		function setSize() {
+			if (window.innerWidth <= maxWidth) {
 
-			function reCounting() {
 				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
 				let numbers = Sizes.getHeightOfElements(elements);
-				let grid = Grid.createGrid(numbers, columns);
 				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin);
 
-				return {
-					'columns': columns,
-					'numbers': numbers,
-					'grid': grid,
-					'containerFullWidth': containerFullWidth
-				};
+				Styles.replaceItems({
+					itemsHeight: numbers,
+					columnsNumber: columns,
+					itemSelector: itemSelector,
+					itemWidth: colWidth,
+					itemMargin: colMargin,
+					containerSelector: containerSelector,
+					containerFullWidth: containerFullWidth
+				});
 			}
-
-			if (window.innerWidth <= maxWidth) {
-				// Get new columns number because window width is only one important
-				let data = reCounting();
-				Styles.replaceItems(data.grid, elements, gridContainer, data.containerFullWidth);
-			}
-
 		}
-
-		//@TODO:
-		// remove listeners
-		// change somewhere vars -> lets
-		// create grid with prototype
-		// grid -> Map?
 	}
 
 };

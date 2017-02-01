@@ -80,19 +80,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	module.exports = function Chocolate(params) {
 		_classCallCheck(this, Chocolate);
 
+		//@TODO:
+		// remove listeners
+		// change somewhere vars -> lets
+		// create grid with prototype
+		// grid -> Map?
+
+		//@TODO: Check Parameters
 		// Selector checking: string, length,
-		// Sperva :
+		// At first :
 		//params.hasOwnProperty('containerSelector');
+		// Then:
 		//if (typeof params.containerSelector === "string") {
 		//	if (params.containerSelector.length > 0) {
-		//
+		//		// logic
 		//	}
 		//}
 
+		//@TODO: Move logic to main, leave only parms checker ???
 		/*
   	Main.run({
-  		width: --
-  		margin: ---
+  	 Available params:
+  	 containerSelector
+  	 containerMaxWidth
+  	 itemSelector --->itemSelector
+  	 columnWidth
+  	 columnMargin
   	})
    */
 
@@ -128,7 +141,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		this._containerSelector = params.containerSelector;
 		this._itemSelector = params.itemSelector;
 		this._columnUserWidth = params.columnWidth;
-		//this._containerUserWidth = params.containerWidth;
 		this._columnUserMargin = params.columnMargin;
 		this._columnWidth = elements[0].clientWidth;
 		this._containerWidth = gridContainer.clientWidth;
@@ -150,40 +162,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		var colWidth = this._columnUserWidth,
 		    colMargin = this._columnUserMargin,
-		    maxWidth = this._containerUserMaxWidth;
+		    containerSelector = this._containerSelector,
+		    maxWidth = this._containerUserMaxWidth,
+		    itemSelector = this._itemSelector;
 
+		// *********** Resize *********** //
 		setSize();
 
 		window.addEventListener('resize', setSize);
 
 		function setSize() {
-
-			function reCounting() {
-				var columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
-				var numbers = Sizes.getHeightOfElements(elements);
-				var grid = Grid.createGrid(numbers, columns);
-				var containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin);
-
-				return {
-					'columns': columns,
-					'numbers': numbers,
-					'grid': grid,
-					'containerFullWidth': containerFullWidth
-				};
-			}
-
 			if (window.innerWidth <= maxWidth) {
-				// Get new columns number because window width is only one important
-				var data = reCounting();
-				Styles.replaceItems(data.grid, elements, gridContainer, data.containerFullWidth);
+
+				var _columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
+				var _numbers = Sizes.getHeightOfElements(elements);
+				var _containerFullWidth = Sizes.getContainerWidth(colWidth, _columns, colMargin);
+
+				Styles.replaceItems({
+					itemsHeight: _numbers,
+					columnsNumber: _columns,
+					itemSelector: itemSelector,
+					itemWidth: colWidth,
+					itemMargin: colMargin,
+					containerSelector: containerSelector,
+					containerFullWidth: _containerFullWidth
+				});
 			}
 		}
-
-		//@TODO:
-		// remove listeners
-		// change somewhere vars -> lets
-		// create grid with prototype
-		// grid -> Map?
 	};
 
 	/***/
@@ -284,19 +289,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Styles = function () {
 		function Styles() {
 			_classCallCheck(this, Styles);
-
-			this._blue = "#cbd0e1";
-			this._green = "#d1f313";
-			this._red = "#ff0000";
 		}
 
 		_createClass(Styles, [{
-			key: 'colors',
-			value: function colors() {
-				return [this._blue, this._green, this._red];
-			}
-		}, {
 			key: 'replaceItems',
+
+
+			/**
+    *
+    * @param params
+    */
 			value: function replaceItems(params) {
 				// Get grid
 				var grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
@@ -309,7 +311,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					if (grid.hasOwnProperty(col)) {
 						var column = grid[col];
 						var sum = 0;
-						var mapOfSums = [];
+						var mapOfSums = []; // For TEST
 
 						for (var e = 0; e < column.length; e++) {
 							var item = column[e];
@@ -328,7 +330,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 				}
 
-				console.log(mapOfSums);
+				//console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
+
 				container.style.height = sum + 'px'; // Height??
 				container.style.width = params.containerFullWidth + 'px';
 			}
@@ -476,9 +479,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	/***/
 },
 /* 5 */
-/***/function (module, exports) {
+/***/function (module, exports, __webpack_require__) {
 
 	'use strict';
+
+	/**
+  * Dependencies
+  */
+
+	var Sizes = __webpack_require__(2);
+	var Styles = __webpack_require__(3);
 
 	var Main = function () {
 		function Main() {
@@ -487,17 +497,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(Main, [{
 			key: 'run',
-			value: function run() {}
+			value: function run(params) {}
 		}, {
 			key: 'setListeners',
 			value: function setListeners() {}
 		}, {
 			key: 'resizeContainer',
-			value: function resizeContainer() {}
+			value: function resizeContainer(params) {
+				//@TODO:
+				// remove listeners
+				// Run first
+				setSize();
+
+				window.addEventListener('resize', setSize);
+
+				function setSize() {
+					if (window.innerWidth <= params.maxWidth) {
+
+						var columns = Sizes.getColumnNumber(window.innerWidth, params.colWidth + params.colMargin);
+						var numbers = Sizes.getHeightOfElements(params.elements);
+						var containerFullWidth = Sizes.getContainerWidth(params.colWidth, params.columns, params.colMargin);
+
+						Styles.replaceItems({
+							itemsHeight: numbers,
+							columnsNumber: columns,
+							itemSelector: params.itemSelector,
+							itemWidth: params.colWidth,
+							itemMargin: params.colMargin,
+							containerSelector: params.containerSelector,
+							containerFullWidth: containerFullWidth
+						});
+					}
+				}
+			}
 		}]);
 
 		return Main;
 	}();
+
+	module.exports = new Main();
 
 	/***/
 },
