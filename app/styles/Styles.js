@@ -21,6 +21,7 @@ class Styles {
 		for (let e = 0; e < elements.length; e++) {
 			elements[e].style.width = itemWidth + "px"; // item width
 			elements[e].style.position = "absolute"; // item position
+			elements[e].style.transition = "all ease .5s"; // animation
 		}
 	}
 
