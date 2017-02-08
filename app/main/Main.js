@@ -5,6 +5,7 @@
  */
 var Sizes = require('../sizes/Sizes');
 var Styles = require('../styles/Styles');
+var Errors = require('../errors/Errors');
 
 class Main {
 
@@ -12,36 +13,28 @@ class Main {
 
 	}
 
+	parametersChecker(params, property, type) {
+		if (params.hasOwnProperty(property)) {
+			if (typeof params[property] === type) {
+				if (params[property] !== undefined && params[property] !== null && params[property] != false) {
+					return params[property];
+				} else {
+					Errors.throwError(property, 'E_003');
+				}
+			} else {
+				Errors.throwError(property, 'E_002');
+			}
+		} else {
+			Errors.throwError(property, 'E_001');
+		}
+	}
+
 	setListeners() {
 
 	}
 
 	resizeContainer(params) {
-		//@TODO:
-		// remove listeners
-		// Run first
-		setSize();
 
-		window.addEventListener('resize', setSize);
-
-		function setSize() {
-			if (window.innerWidth <= params.maxWidth) {
-
-				let columns = Sizes.getColumnNumber(window.innerWidth, params.colWidth + params.colMargin);
-				let numbers = Sizes.getHeightOfElements(params.elements);
-				let containerFullWidth = Sizes.getContainerWidth(params.colWidth, params.columns, params.colMargin);
-
-				Styles.replaceItems({
-					itemsHeight: numbers,
-					columnsNumber: columns,
-					itemSelector: params.itemSelector,
-					itemWidth: params.colWidth,
-					itemMargin: params.colMargin,
-					containerSelector: params.containerSelector,
-					containerFullWidth: containerFullWidth
-				});
-			}
-		}
 	}
 }
 

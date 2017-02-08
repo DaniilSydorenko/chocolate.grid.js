@@ -7,73 +7,87 @@ var Sizes = require('./sizes/Sizes');
 var Styles = require('./styles/Styles');
 var Grid = require('./grid/Grid');
 var Main = require('./main/Main');
-var Instafeed = require('instafeed.js');
 
 module.exports = class Chocolate {
 
 	constructor(params) {
 
+		var options = {};
 
+		//@TODO: Parameters checker
+		options.containerSelector = Main.parametersChecker(params, 'containerSelector', 'string');
+		options.containerMaxWidth = Main.parametersChecker(params, 'containerMaxWidth', 'number');
+		options.itemSelector = Main.parametersChecker(params, 'itemSelector', 'string');
+		options.columnWidth = Main.parametersChecker(params, 'columnWidth', 'number');
+		options.columnMargin = Main.parametersChecker(params, 'columnMargin', 'number');
 
-		var elements = document.querySelectorAll(".js-tile");
+		//@TODO: Move logic to main, leave only params checker ???
+		//Main.run({
+		//	 containerSelector
+		//	 containerMaxWidth
+		//	 itemSelector
+		//	 columnWidth
+		//	 columnMargin
+		// })
+
+		var elements = document.querySelectorAll(".js-item");
 		let gridContainer = document.querySelector('.js-chocolate');
 
-		Sizes.setElementsHeight(elements);
+		Styles.setElementStylesBeforeGridCreated(elements, params.columnWidth);
 
-		this._containerSelector = params.containerSelector;
-		this._itemSelector = params.itemSelector;
-		this._columnUserWidth = params.columnWidth;
-		this._columnUserMargin = params.columnMargin;
-		this._columnWidth = elements[0].clientWidth;
-		this._containerWidth = gridContainer.clientWidth;
-		this._containerUserMaxWidth = params.containerMaxWidth;
+		/**
+		 * Common func for static grid and resize
+		 *
+		 * @param containerWidth
+		 * @returns {{numbers: *, columns: *, containerFullWidth: *}}
+		 */
+		function sizesForGrid(containerWidth) {
+			let numbers = Sizes.getHeightOfElements(elements);
+			let columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
+			let containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
 
-		let numbers = Sizes.getHeightOfElements(elements);
-		let columns = Sizes.getColumnNumber(this._containerWidth, this._columnUserWidth);
-		let containerFullWidth = Sizes.getContainerWidth(this._columnUserWidth, columns, this._columnUserMargin);
+			return {
+				numbers: numbers,
+				columns: columns,
+				containerFullWidth: containerFullWidth
+			};
+		}
+
+		let sizes = sizesForGrid(gridContainer.clientWidth);
 
 		Styles.replaceItems({
-			itemsHeight: numbers,
-			columnsNumber: columns,
-			itemSelector: this._itemSelector,
-			itemWidth: this._columnUserWidth,
-			itemMargin: this._columnUserMargin,
-			containerSelector: this._containerSelector,
-			containerFullWidth: containerFullWidth
+			itemsHeight: sizes.numbers,
+			columnsNumber: sizes.columns,
+			itemSelector: options.itemSelector,
+			itemWidth: options.columnWidth,
+			itemMargin: options.columnMargin,
+			containerSelector: options.containerSelector,
+			containerFullWidth:sizes. containerFullWidth
 		});
-
-		var colWidth = this._columnUserWidth,
-			colMargin = this._columnUserMargin,
-			containerSelector = this._containerSelector,
-			maxWidth = this._containerUserMaxWidth,
-			itemSelector = this._itemSelector;
-
 
 		// *********** Resize *********** //
 		setSize();
 
+		//@TODO:
+		// remove listeners
 		window.addEventListener('resize', setSize);
 
 		function setSize() {
-			if (window.innerWidth <= maxWidth) {
-
-				let columns = Sizes.getColumnNumber(window.innerWidth, colWidth + colMargin);
-				let numbers = Sizes.getHeightOfElements(elements);
-				let containerFullWidth = Sizes.getContainerWidth(colWidth, columns, colMargin);
+			if (window.innerWidth <= options.containerMaxWidth) {
+				let sizes = sizesForGrid(window.innerWidth);
 
 				Styles.replaceItems({
-					itemsHeight: numbers,
-					columnsNumber: columns,
-					itemSelector: itemSelector,
-					itemWidth: colWidth,
-					itemMargin: colMargin,
-					containerSelector: containerSelector,
-					containerFullWidth: containerFullWidth
+					itemsHeight: sizes.numbers,
+					columnsNumber: sizes.columns,
+					itemSelector: options.itemSelector,
+					itemWidth: options.columnWidth,
+					itemMargin: options.columnMargin,
+					containerSelector: options.containerSelector,
+					containerFullWidth: sizes.containerFullWidth
 				});
 			}
 		}
 	}
-
 };
 
 
