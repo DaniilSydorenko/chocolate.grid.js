@@ -1,0 +1,24 @@
+{
+  "name": "chocolate.grid.js",
+  "description": "Vertical grid based on JavaScript",
+  "main": "index.js",
+  "authors": [
+    "Daniil Sydorenko"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "javascript",
+    "grid",
+    "js-grid",
+    "front-end",
+    "layout"
+  ],
+  "homepage": "https://github.com/DaniilSydorenko/chocolate.grid.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
