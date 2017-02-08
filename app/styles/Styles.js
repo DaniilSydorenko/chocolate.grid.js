@@ -3,12 +3,25 @@
 /**
  * Dependencies
  */
-var Sizes = require('../sizes/Sizes');
 var Grid = require('../grid/Grid');
 
 class Styles {
 
 	/**
+	 * Good way to set styles on items before grid is ready
+	 *
+	 * @param elements
+	 * @param itemWidth
+	 */
+	setElementStylesBeforeGridCreated(elements, itemWidth) {
+		for (let e = 0; e < elements.length; e++) {
+			elements[e].style.width = itemWidth + "px"; // item width
+			elements[e].style.position = "absolute"; // item position
+		}
+	}
+
+	/**
+	 * Create grid and set all items in grid
 	 *
 	 * @param params
 	 */
@@ -19,6 +32,7 @@ class Styles {
 		 //Get items and container
 		var items = document.querySelectorAll(params.itemSelector);
 		var container = document.querySelector(params.containerSelector);
+		var itemWidth = params.itemWidth;
 
 		for (var col in grid) {
 			if (grid.hasOwnProperty(col)) {
@@ -31,7 +45,6 @@ class Styles {
 
 					for (let index in item) {
 						if (item.hasOwnProperty(index)) {
-							// Set items positions
 							items[index].style.transform =
 								"matrix(1, 0, 0, 1, " +
 								((params.itemWidth + params.itemMargin) * col) + ", " + // Left
@@ -45,8 +58,10 @@ class Styles {
 			}
 		}
 
-		//console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
-
+		// console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
+		// add max Width
+		container.style.position = "relative";
+		container.style.margin = "0 auto"; // depends of size, if not 100%
 		container.style.height = sum + 'px'; // Height??
 		container.style.width = params.containerFullWidth + 'px';
 	}
