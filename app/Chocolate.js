@@ -75,7 +75,6 @@ module.exports = class Chocolate {
 		function setSize() {
 			if (window.innerWidth <= options.containerMaxWidth) {
 				let sizes = sizesForGrid(window.innerWidth);
-
 				Styles.replaceItems({
 					itemsHeight: sizes.numbers,
 					columnsNumber: sizes.columns,

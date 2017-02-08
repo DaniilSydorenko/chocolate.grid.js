@@ -9,7 +9,7 @@ class Errors {
 		this.E_005 = 'Invalid value';
 		this.E_006 = 'Missing container selector property';
 		this.E_007 = 'Missing item selector property';
-		this.E_008 = 'Missing width of item property';
+		this.E_008 = 'Missing width of item';
 		this.E_009 = 'Missing margin property';
 		this.E_010 = 'Missing container max width property';
 	}
