@@ -6,20 +6,6 @@ class Sizes {
         this._width = window.innerWidth;
     }
 
-    get height() {
-        return this._height;
-    }
-
-    get width() {
-        return this._width;
-    }
-
-    setElementsHeight(elements) {
-        for (let e = 0; e < elements.length; e++) {
-            elements[e].setAttribute("data-height", elements[e].clientHeight);
-        }
-    }
-
     getColumnNumber(containerWidth, columnWidth) {
         // container width exmp - 1200
         // col width exmp - 250
