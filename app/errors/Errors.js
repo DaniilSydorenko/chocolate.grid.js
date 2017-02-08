@@ -5,8 +5,8 @@ class Errors {
 		this.E_001 = 'Property is not defined';
 		this.E_002 = 'Invalid type of parameter';
 		this.E_003 = 'Property is empty';
-		this.E_004 = '';
-		this.E_005 = '';
+		this.E_004 = 'Invalid size of container';
+		this.E_005 = 'Invalid value';
 		this.E_006 = 'Missing container selector property';
 		this.E_007 = 'Missing item selector property';
 		this.E_008 = 'Missing width of item property';
