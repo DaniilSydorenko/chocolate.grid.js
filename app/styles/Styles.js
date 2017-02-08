@@ -12,8 +12,12 @@ class Styles {
 	 *
 	 * @param elements
 	 * @param itemWidth
+	 * @param container
+	 * @param containerMaxWidth
 	 */
-	setElementStylesBeforeGridCreated(elements, itemWidth) {
+	setElementStylesBeforeGridCreated(elements, itemWidth, container, containerMaxWidth) {
+		container.style.maxWidth = containerMaxWidth + "px";
+
 		for (let e = 0; e < elements.length; e++) {
 			elements[e].style.width = itemWidth + "px"; // item width
 			elements[e].style.position = "absolute"; // item position

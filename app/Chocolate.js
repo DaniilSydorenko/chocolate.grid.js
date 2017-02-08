@@ -31,9 +31,9 @@ module.exports = class Chocolate {
 		// })
 
 		var elements = document.querySelectorAll(".js-item");
-		let gridContainer = document.querySelector('.js-chocolate');
+		var gridContainer = document.querySelector('.js-chocolate');
 
-		Styles.setElementStylesBeforeGridCreated(elements, params.columnWidth);
+		Styles.setElementStylesBeforeGridCreated(elements, options.columnWidth, gridContainer, options.containerMaxWidth);
 
 		/**
 		 * Common func for static grid and resize
