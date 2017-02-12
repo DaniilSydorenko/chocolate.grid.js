@@ -26,7 +26,7 @@ class Styles {
 	}
 
 	/**
-	 * Create grid and set all items in grid
+	 * Replace all items in the grid
 	 *
 	 * @param params
 	 */
@@ -34,40 +34,40 @@ class Styles {
 		// Get grid
 		var grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
 
-		 //Get items and container
+		// Get items and container
 		var items = document.querySelectorAll(params.itemSelector);
 		var container = document.querySelector(params.containerSelector);
-		var itemWidth = params.itemWidth;
+		var containerHeight = null;
 
 		for (var col in grid) {
 			if (grid.hasOwnProperty(col)) {
 				var column = grid[col];
-				var sum = 0;
-				var mapOfSums = []; // For TEST
+				var positionTop = 0;
+				var fullSumOfHeights = 0;
 
 				for (let e = 0; e < column.length; e++) {
 					var item = column[e];
-
 					for (let index in item) {
 						if (item.hasOwnProperty(index)) {
 							items[index].style.transform =
 								"matrix(1, 0, 0, 1, " +
 								((params.itemWidth + params.itemMargin) * col) + ", " + // Left
-								(sum + (params.itemMargin * e)) + ")"; // Top
-
-							sum += item[index]; // Should count MARGINS !!!
-							mapOfSums.push(sum);
+								(positionTop + (params.itemMargin * e)) + ")"; // Top
+							positionTop += item[index]; // Sum of heights for top position of next item
+							fullSumOfHeights += (item[index] + params.itemMargin); // Sum of all items heights and margins for current column
 						}
 					}
+				}
+
+				if (containerHeight === null || containerHeight < fullSumOfHeights) {
+					containerHeight = fullSumOfHeights;
 				}
 			}
 		}
 
-		// console.log(mapOfSums); // Sum of Last columns. NEED: Sum of biggest column
-		// add max Width
 		container.style.position = "relative";
 		container.style.margin = "0 auto"; // depends of size, if not 100%
-		container.style.height = sum + 'px'; // Height??
+		container.style.height = containerHeight + 'px';
 		container.style.width = params.containerFullWidth + 'px';
 	}
 }
