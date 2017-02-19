@@ -87,10 +87,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		options.columnWidth = Main.parametersChecker(params, 'columnWidth', 'number');
 		options.columnMargin = Main.parametersChecker(params, 'columnMargin', 'number');
 
-		var elements = document.querySelectorAll(".js-item");
+		var items = document.querySelectorAll(".js-item");
 		var gridContainer = document.querySelector('.js-chocolate');
 
-		Styles.setElementStylesBeforeGridCreated(elements, options.columnWidth, gridContainer, options.containerMaxWidth);
+		Styles.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
 
 		/**
    * Common func for static grid and resize
@@ -99,7 +99,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    * @returns {{numbers: *, columns: *, containerFullWidth: *}}
    */
 		function sizesForGrid(containerWidth) {
-			var numbers = Sizes.getHeightOfElements(elements);
+			var numbers = Sizes.getHeightOfItems(items);
 			var columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
 			var containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
 
@@ -167,19 +167,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		_createClass(Sizes, [{
+			key: 'getResponsiveColumnNumber',
+			value: function getResponsiveColumnNumber() {
+				// TODO
+			}
+		}, {
 			key: 'getColumnNumber',
 			value: function getColumnNumber(containerWidth, columnWidth) {
-				// container width exmp - 1200
-				// col width exmp - 250
-				// col number exmp - 4
-				// 1200 / 250 = 4x250 + 200 // poka bez shiriny kolony
-				// permanent margin ??
-
-				//@TODO
-				// Responsive column
-				// Permanent column
-				// need percents
-
 				return Math.floor(containerWidth / columnWidth);
 			}
 		}, {
@@ -189,21 +183,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return columnNumber * (columnWidth + columnMargin) - columnMargin;
 			}
 		}, {
-			key: 'getHeightOfElements',
-			value: function getHeightOfElements(elements) {
+			key: 'getHeightOfItems',
+			value: function getHeightOfItems(items) {
 				var numbers = [];
-				for (var index = 0; index < elements.length; index++) {
-					var obj1 = _defineProperty({}, index, elements[index].clientHeight);
+				for (var index = 0; index < items.length; index++) {
+					var obj1 = _defineProperty({}, index, items[index].clientHeight);
 					numbers.push(obj1);
 				}
 				return numbers;
 			}
 		}, {
-			key: 'getElementsWidth',
-			value: function getElementsWidth(elements) {
+			key: 'getItemsWidth',
+			value: function getItemsWidth(items) {
 				var numbers = [];
-				for (var index = 0; index < elements.length; index++) {
-					var obj1 = _defineProperty({}, index, elements[index].clientWidth);
+				for (var index = 0; index < items.length; index++) {
+					var obj1 = _defineProperty({}, index, items[index].clientWidth);
 					numbers.push(obj1);
 				}
 				return numbers;
@@ -234,24 +228,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		_createClass(Styles, [{
-			key: 'setElementStylesBeforeGridCreated',
+			key: 'setItemStylesBeforeGridCreated',
 
 
 			/**
     * Good way to set styles on items before grid is ready
     *
-    * @param elements
+    * @param items
     * @param itemWidth
     * @param container
     * @param containerMaxWidth
     */
-			value: function setElementStylesBeforeGridCreated(elements, itemWidth, container, containerMaxWidth) {
+			value: function setItemStylesBeforeGridCreated(items, itemWidth, container, containerMaxWidth) {
 				container.style.maxWidth = containerMaxWidth + "px";
 
-				for (var e = 0; e < elements.length; e++) {
-					elements[e].style.width = itemWidth + "px"; // item width
-					elements[e].style.position = "absolute"; // item position
-					elements[e].style.transition = "all ease .5s"; // animation
+				for (var e = 0; e < items.length; e++) {
+					items[e].style.width = itemWidth + "px"; // item width
+					items[e].style.position = "absolute"; // item position
+					items[e].style.transition = "all ease .5s"; // animation
 				}
 			}
 

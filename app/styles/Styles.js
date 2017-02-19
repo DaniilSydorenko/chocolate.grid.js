@@ -10,18 +10,18 @@ class Styles {
 	/**
 	 * Good way to set styles on items before grid is ready
 	 *
-	 * @param elements
+	 * @param items
 	 * @param itemWidth
 	 * @param container
 	 * @param containerMaxWidth
 	 */
-	setElementStylesBeforeGridCreated(elements, itemWidth, container, containerMaxWidth) {
+	setItemStylesBeforeGridCreated(items, itemWidth, container, containerMaxWidth) {
 		container.style.maxWidth = containerMaxWidth + "px";
 
-		for (let e = 0; e < elements.length; e++) {
-			elements[e].style.width = itemWidth + "px"; // item width
-			elements[e].style.position = "absolute"; // item position
-			elements[e].style.transition = "all ease .5s"; // animation
+		for (let e = 0; e < items.length; e++) {
+			items[e].style.width = itemWidth + "px"; // item width
+			items[e].style.position = "absolute"; // item position
+			items[e].style.transition = "all ease .5s"; // animation
 		}
 	}
 

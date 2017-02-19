@@ -11,7 +11,6 @@ var Main = require('./main/Main');
 module.exports = class Chocolate {
 
 	constructor(params) {
-
 		var options = {};
 
 		options.containerSelector = Main.parametersChecker(params, 'containerSelector', 'string');
@@ -20,10 +19,10 @@ module.exports = class Chocolate {
 		options.columnWidth = Main.parametersChecker(params, 'columnWidth', 'number');
 		options.columnMargin = Main.parametersChecker(params, 'columnMargin', 'number');
 
-		var elements = document.querySelectorAll(".js-item");
+		var items = document.querySelectorAll(".js-item");
 		var gridContainer = document.querySelector('.js-chocolate');
 
-		Styles.setElementStylesBeforeGridCreated(elements, options.columnWidth, gridContainer, options.containerMaxWidth);
+		Styles.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
 
 		/**
 		 * Common func for static grid and resize
@@ -32,7 +31,7 @@ module.exports = class Chocolate {
 		 * @returns {{numbers: *, columns: *, containerFullWidth: *}}
 		 */
 		function sizesForGrid(containerWidth) {
-			let numbers = Sizes.getHeightOfElements(elements);
+			let numbers = Sizes.getHeightOfItems(items);
 			let columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
 			let containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
 
