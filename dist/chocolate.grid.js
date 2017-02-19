@@ -81,21 +81,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		var options = {};
 
-		//@TODO: Parameters checker
 		options.containerSelector = Main.parametersChecker(params, 'containerSelector', 'string');
 		options.containerMaxWidth = Main.parametersChecker(params, 'containerMaxWidth', 'number');
 		options.itemSelector = Main.parametersChecker(params, 'itemSelector', 'string');
 		options.columnWidth = Main.parametersChecker(params, 'columnWidth', 'number');
 		options.columnMargin = Main.parametersChecker(params, 'columnMargin', 'number');
-
-		//@TODO: Move logic to main, leave only params checker ???
-		//Main.run({
-		//	 containerSelector
-		//	 containerMaxWidth
-		//	 itemSelector
-		//	 columnWidth
-		//	 columnMargin
-		// })
 
 		var elements = document.querySelectorAll(".js-item");
 		var gridContainer = document.querySelector('.js-chocolate');
@@ -120,39 +110,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			};
 		}
 
-		var sizes = sizesForGrid(gridContainer.clientWidth);
+		/**
+   * Wrapper for big call of replaceItems({...})
+   *
+   * @param options
+   * @param container
+   */
+		function replaceItemsWrapper(options, container) {
+			var sizes = sizesForGrid(container);
 
-		Styles.replaceItems({
-			itemsHeight: sizes.numbers,
-			columnsNumber: sizes.columns,
-			itemSelector: options.itemSelector,
-			itemWidth: options.columnWidth,
-			itemMargin: options.columnMargin,
-			containerSelector: options.containerSelector,
-			containerFullWidth: sizes.containerFullWidth
-		});
+			Styles.replaceItems({
+				itemsHeight: sizes.numbers,
+				columnsNumber: sizes.columns,
+				itemSelector: options.itemSelector,
+				itemWidth: options.columnWidth,
+				itemMargin: options.columnMargin,
+				containerSelector: options.containerSelector,
+				containerFullWidth: sizes.containerFullWidth
+			});
+		}
+
+		replaceItemsWrapper(options, gridContainer.clientWidth);
 
 		// *********** Resize *********** //
-		setSize();
-
-		//@TODO:
-		// remove listeners
+		setSize(); // First call
 		window.addEventListener('resize', setSize);
+		var tempResize = window.innerWidth; // Remember temporary width of window
 
 		function setSize() {
 			if (window.innerWidth <= options.containerMaxWidth) {
-				var _sizes = sizesForGrid(window.innerWidth);
-				Styles.replaceItems({
-					itemsHeight: _sizes.numbers,
-					columnsNumber: _sizes.columns,
-					itemSelector: options.itemSelector,
-					itemWidth: options.columnWidth,
-					itemMargin: options.columnMargin,
-					containerSelector: options.containerSelector,
-					containerFullWidth: _sizes.containerFullWidth
-				});
+				if (tempResize <= window.innerWidth) {
+					replaceItemsWrapper(options, window.innerWidth);
+				} else {
+					replaceItemsWrapper(options, window.innerWidth - options.columnWidth / 2);
+				}
+
+				tempResize = window.innerWidth;
 			}
 		}
+		// *********** Resize END *********** //
 	};
 
 	/***/
