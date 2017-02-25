@@ -132,6 +132,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		replaceItemsWrapper(options, gridContainer.clientWidth);
 
+		for (var ai = 0; ai < items.length; ai++) {
+			items[ai].style.transition = "all ease .7s"; // animation
+			items[ai].style.opacity = 1; // opacity
+		}
+
 		// *********** Resize *********** //
 		setSize(); // First call
 		window.addEventListener('resize', setSize);
@@ -139,6 +144,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		function setSize() {
 			if (window.innerWidth <= options.containerMaxWidth) {
+				Styles.setItemStylesAfterGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
+
 				if (tempResize <= window.innerWidth) {
 					replaceItemsWrapper(options, window.innerWidth);
 				} else {
@@ -245,6 +252,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				for (var e = 0; e < items.length; e++) {
 					items[e].style.width = itemWidth + "px"; // item width
 					items[e].style.position = "absolute"; // item position
+					items[e].style.opacity = 0;
+				}
+			}
+
+			/**
+    * Good way to set styles on items before grid is ready
+    *
+    * @param items
+    * @param itemWidth
+    * @param container
+    * @param containerMaxWidth
+    */
+
+		}, {
+			key: 'setItemStylesAfterGridCreated',
+			value: function setItemStylesAfterGridCreated(items, itemWidth, container, containerMaxWidth) {
+				for (var e = 0; e < items.length; e++) {
 					items[e].style.transition = "all ease .5s"; // animation
 				}
 			}
@@ -276,8 +300,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							var item = column[e];
 							for (var index in item) {
 								if (item.hasOwnProperty(index)) {
-									items[index].style.transform = "matrix(1, 0, 0, 1, " + (params.itemWidth + params.itemMargin) * col + ", " + ( // Left
-									positionTop + params.itemMargin * e) + ")"; // Top
+									items[index].style.top = positionTop + params.itemMargin * e + "px";
+									items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
+
+									//items[index].style.transform =
+									//	"matrix(1, 0, 0, 1, " +
+									//	((params.itemWidth + params.itemMargin) * col) + ", " + // Left
+									//	(positionTop + (params.itemMargin * e)) + ")"; // Top
+
 									positionTop += item[index]; // Sum of heights for top position of next item
 									fullSumOfHeights += item[index] + params.itemMargin; // Sum of all items heights and margins for current column
 								}

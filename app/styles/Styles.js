@@ -21,6 +21,20 @@ class Styles {
 		for (let e = 0; e < items.length; e++) {
 			items[e].style.width = itemWidth + "px"; // item width
 			items[e].style.position = "absolute"; // item position
+			items[e].style.opacity = 0;
+		}
+	}
+
+	/**
+	 * Good way to set styles on items before grid is ready
+	 *
+	 * @param items
+	 * @param itemWidth
+	 * @param container
+	 * @param containerMaxWidth
+	 */
+	setItemStylesAfterGridCreated(items, itemWidth, container, containerMaxWidth) {
+		for (let e = 0; e < items.length; e++) {
 			items[e].style.transition = "all ease .5s"; // animation
 		}
 	}
@@ -49,10 +63,14 @@ class Styles {
 					var item = column[e];
 					for (let index in item) {
 						if (item.hasOwnProperty(index)) {
-							items[index].style.transform =
-								"matrix(1, 0, 0, 1, " +
-								((params.itemWidth + params.itemMargin) * col) + ", " + // Left
-								(positionTop + (params.itemMargin * e)) + ")"; // Top
+							items[index].style.top = positionTop + (params.itemMargin * e) + "px";
+							items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
+
+							//items[index].style.transform =
+							//	"matrix(1, 0, 0, 1, " +
+							//	((params.itemWidth + params.itemMargin) * col) + ", " + // Left
+							//	(positionTop + (params.itemMargin * e)) + ")"; // Top
+
 							positionTop += item[index]; // Sum of heights for top position of next item
 							fullSumOfHeights += (item[index] + params.itemMargin); // Sum of all items heights and margins for current column
 						}
@@ -69,6 +87,7 @@ class Styles {
 		container.style.margin = "0 auto"; // depends of size, if not 100%
 		container.style.height = containerHeight + 'px';
 		container.style.width = params.containerFullWidth + 'px';
+
 	}
 }
 

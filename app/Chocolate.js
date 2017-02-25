@@ -64,6 +64,11 @@ module.exports = class Chocolate {
 
 		replaceItemsWrapper(options, gridContainer.clientWidth);
 
+		for (let ai = 0; ai < items.length; ai++) {
+			items[ai].style.transition = "all ease .7s"; // animation
+			items[ai].style.opacity = 1; // opacity
+		}
+
 		// *********** Resize *********** //
 		setSize(); // First call
 		window.addEventListener('resize', setSize);
@@ -71,6 +76,8 @@ module.exports = class Chocolate {
 
 		function setSize() {
 			if (window.innerWidth <= options.containerMaxWidth) {
+				Styles.setItemStylesAfterGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
+
 				if (tempResize <= window.innerWidth) {
 					replaceItemsWrapper(options, window.innerWidth);
 				} else {
