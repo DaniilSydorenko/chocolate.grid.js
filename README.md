@@ -31,6 +31,21 @@ bower install or bower install --allow-root
 npm install --save-dev
 ```
 
+## Configuration
+Implement configuration code on the end of the page
+```javascript
+
+<script>
+    new Chocolate({
+        containerSelector: '.js-chocolate',
+        containerMaxWidth: 1400,
+        itemSelector: '.js-item',
+        columnWidth: 250,
+        columnMargin: 20
+    });
+</script>
+```
+
 License
 -------
 
