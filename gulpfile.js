@@ -1,4 +1,4 @@
-var gulp = require('gulp'),
+const gulp = require('gulp'),
     rename = require('gulp-rename'),
     babel = require('gulp-babel'),
     concat = require('gulp-concat'),
