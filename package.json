@@ -1,6 +1,6 @@
 {
   "name": "chocolate.grid.js",
-  "version": "1.2.5",
+  "version": "1.3.0",
   "description": "Frontend layout implemented in grid based on JavaScript",
   "main": "index.js",
   "scripts": {
