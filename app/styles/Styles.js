@@ -1,9 +1,6 @@
 'use strict';
 
-/**
- * Dependencies
- */
-var Grid = require('../grid/Grid');
+const Grid = require('../grid/Grid');
 
 class Styles {
 
@@ -17,26 +14,12 @@ class Styles {
 	 */
 	setItemStylesBeforeGridCreated(items, itemWidth, container, containerMaxWidth) {
 		container.style.maxWidth = containerMaxWidth + "px";
-
 		for (let e = 0; e < items.length; e++) {
 			items[e].style.width = itemWidth + "px"; // item width
 			items[e].style.position = "absolute"; // item position
 			items[e].style.opacity = 0;
-		}
-	}
-
-	/**
-	 * Good way to set styles on items before grid is ready
-	 *
-	 * @param items
-	 * @param itemWidth
-	 * @param container
-	 * @param containerMaxWidth
-	 */
-	setItemStylesAfterGridCreated(items, itemWidth, container, containerMaxWidth) {
-		for (let e = 0; e < items.length; e++) {
-			items[e].style.transition = "all ease .5s"; // animation
-		}
+            items[e].style.transition = "all ease .5s"; // animation
+        }
 	}
 
 	/**
@@ -46,14 +29,14 @@ class Styles {
 	 */
 	replaceItems(params) {
 		// Get grid
-		var grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
+		const grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
 
 		// Get items and container
 		var items = document.querySelectorAll(params.itemSelector);
 		var container = document.querySelector(params.containerSelector);
 		var containerHeight = null;
 
-		for (var col in grid) {
+		for (let col in grid) {
 			if (grid.hasOwnProperty(col)) {
 				var column = grid[col];
 				var positionTop = 0;
@@ -63,6 +46,12 @@ class Styles {
 					var item = column[e];
 					for (let index in item) {
 						if (item.hasOwnProperty(index)) {
+
+                            // items[index].style.width = params.itemWidth + "px"; // item width
+                            // items[index].style.position = "absolute"; // item position
+                            // items[index].style.opacity = 0;
+                            // items[index].style.transition = "all ease .5s"; // animation
+
 							items[index].style.top = positionTop + (params.itemMargin * e) + "px";
 							items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
 
@@ -84,7 +73,8 @@ class Styles {
 		}
 
 		container.style.position = "relative";
-		container.style.margin = "0 auto"; // depends of size, if not 100%
+		container.style.marginLeft = "auto"; // depends of size, if not 100%
+		container.style.marginRight = "auto"; // depends of size, if not 100%
 		container.style.height = containerHeight + 'px';
 		container.style.width = params.containerFullWidth + 'px';
 

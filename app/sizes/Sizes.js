@@ -22,10 +22,9 @@ class Sizes {
 	getHeightOfItems(items) {
 		let numbers = [];
 		for (let index = 0; index < items.length; index++) {
-			var obj1 = {
-				[index]: items[index].clientHeight
-			};
-			numbers.push(obj1);
+			numbers.push({
+                [index]: items[index].clientHeight
+            });
 		}
 		return numbers;
 	}
@@ -33,10 +32,9 @@ class Sizes {
 	getItemsWidth(items) {
 		let numbers = [];
 		for (let index = 0; index < items.length; index++) {
-			var obj1 = {
-				[index]: items[index].clientWidth
-			};
-			numbers.push(obj1);
+			numbers.push({
+                [index]: items[index].clientWidth
+            });
 		}
 		return numbers;
 	}

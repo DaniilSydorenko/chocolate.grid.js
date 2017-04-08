@@ -81,24 +81,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		var options = {};
 
-		options.containerSelector = Main.parametersChecker(params, 'containerSelector', 'string');
-		options.containerMaxWidth = Main.parametersChecker(params, 'containerMaxWidth', 'number');
-		options.itemSelector = Main.parametersChecker(params, 'itemSelector', 'string');
-		options.columnWidth = Main.parametersChecker(params, 'columnWidth', 'number');
-		options.columnMargin = Main.parametersChecker(params, 'columnMargin', 'number');
+		if (Main.parametersChecker(params)) {
+			Object.assign(options, params);
+		}
 
 		var items = document.querySelectorAll(".js-item");
 		var gridContainer = document.querySelector('.js-chocolate');
 
 		Styles.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
 
-		/**
-   * Common func for static grid and resize
-   *
-   * @param containerWidth
-   * @returns {{numbers: *, columns: *, containerFullWidth: *}}
-   */
-		function sizesForGrid(containerWidth) {
+		// @TODO replace
+		var sizesForGrid = function sizesForGrid(containerWidth) {
 			var numbers = Sizes.getHeightOfItems(items);
 			var columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
 			var containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
@@ -108,14 +101,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				columns: columns,
 				containerFullWidth: containerFullWidth
 			};
-		}
+		};
 
-		/**
-   * Wrapper for big call of replaceItems({...})
-   *
-   * @param options
-   * @param container
-   */
+		// @TODO replace
 		function replaceItemsWrapper(options, container) {
 			var sizes = sizesForGrid(container);
 
@@ -130,29 +118,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			});
 		}
 
-		replaceItemsWrapper(options, gridContainer.clientWidth);
-
-		for (var ai = 0; ai < items.length; ai++) {
-			items[ai].style.transition = "all ease .7s"; // animation
-			items[ai].style.opacity = 1; // opacity
-		}
-
 		// *********** Resize *********** //
 		setSize(); // First call
+
 		window.addEventListener('resize', setSize);
+
 		var tempResize = window.innerWidth; // Remember temporary width of window
 
 		function setSize() {
 			if (window.innerWidth <= options.containerMaxWidth) {
-				Styles.setItemStylesAfterGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
-
-				if (tempResize <= window.innerWidth) {
-					replaceItemsWrapper(options, window.innerWidth);
-				} else {
-					replaceItemsWrapper(options, window.innerWidth - options.columnWidth / 2);
-				}
-
+				replaceItemsWrapper(options, window.innerWidth - options.columnWidth / 2);
 				tempResize = window.innerWidth;
+			} else {
+				replaceItemsWrapper(options, options.containerMaxWidth - options.columnWidth / 2);
+			}
+
+			for (var ai = 0; ai < items.length; ai++) {
+				items[ai].style.opacity = 1; // fade in effect
 			}
 		}
 		// *********** Resize END *********** //
@@ -194,8 +176,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getHeightOfItems(items) {
 				var numbers = [];
 				for (var index = 0; index < items.length; index++) {
-					var obj1 = _defineProperty({}, index, items[index].clientHeight);
-					numbers.push(obj1);
+					numbers.push(_defineProperty({}, index, items[index].clientHeight));
 				}
 				return numbers;
 			}
@@ -204,8 +185,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getItemsWidth(items) {
 				var numbers = [];
 				for (var index = 0; index < items.length; index++) {
-					var obj1 = _defineProperty({}, index, items[index].clientWidth);
-					numbers.push(obj1);
+					numbers.push(_defineProperty({}, index, items[index].clientWidth));
 				}
 				return numbers;
 			}
@@ -222,10 +202,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /***/function (module, exports, __webpack_require__) {
 
 	'use strict';
-
-	/**
-  * Dependencies
-  */
 
 	var Grid = __webpack_require__(4);
 
@@ -248,27 +224,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     */
 			value: function setItemStylesBeforeGridCreated(items, itemWidth, container, containerMaxWidth) {
 				container.style.maxWidth = containerMaxWidth + "px";
-
 				for (var e = 0; e < items.length; e++) {
 					items[e].style.width = itemWidth + "px"; // item width
 					items[e].style.position = "absolute"; // item position
 					items[e].style.opacity = 0;
-				}
-			}
-
-			/**
-    * Good way to set styles on items before grid is ready
-    *
-    * @param items
-    * @param itemWidth
-    * @param container
-    * @param containerMaxWidth
-    */
-
-		}, {
-			key: 'setItemStylesAfterGridCreated',
-			value: function setItemStylesAfterGridCreated(items, itemWidth, container, containerMaxWidth) {
-				for (var e = 0; e < items.length; e++) {
 					items[e].style.transition = "all ease .5s"; // animation
 				}
 			}
@@ -300,6 +259,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							var item = column[e];
 							for (var index in item) {
 								if (item.hasOwnProperty(index)) {
+
+									// items[index].style.width = params.itemWidth + "px"; // item width
+									// items[index].style.position = "absolute"; // item position
+									// items[index].style.opacity = 0;
+									// items[index].style.transition = "all ease .5s"; // animation
+
 									items[index].style.top = positionTop + params.itemMargin * e + "px";
 									items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
 
@@ -321,7 +286,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 
 				container.style.position = "relative";
-				container.style.margin = "0 auto"; // depends of size, if not 100%
+				container.style.marginLeft = "auto"; // depends of size, if not 100%
+				container.style.marginRight = "auto"; // depends of size, if not 100%
 				container.style.height = containerHeight + 'px';
 				container.style.width = params.containerFullWidth + 'px';
 			}
@@ -484,27 +450,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Main = function () {
 		function Main() {
 			_classCallCheck(this, Main);
+
+			this.properties = [{
+				name: 'containerSelector',
+				type: 'string'
+			}, {
+				name: 'containerMaxWidth',
+				type: 'number'
+			}, {
+				name: 'itemSelector',
+				type: 'string'
+			}, {
+				name: 'columnWidth',
+				type: 'number'
+			}, {
+				name: 'columnMargin',
+				type: 'number'
+			}];
 		}
 
 		_createClass(Main, [{
-			key: 'run',
-			value: function run(params) {}
-		}, {
 			key: 'parametersChecker',
-			value: function parametersChecker(params, property, type) {
-				if (params.hasOwnProperty(property)) {
-					if (_typeof(params[property]) === type) {
-						if (params[property] !== undefined && params[property] !== null && params[property] != false) {
-							return params[property];
+			value: function parametersChecker(params) {
+				this.properties.map(function (property) {
+					if (params.hasOwnProperty(property.name)) {
+						if (_typeof(params[property.name]) === property.type) {
+							if (params[property.name] === undefined && params[property.name] === null && params[property.name] === false && params[property.name] === '') {
+								Errors.throwError(property.name, 'E_003');
+							}
 						} else {
-							Errors.throwError(property, 'E_003');
+							Errors.throwError(property.name, 'E_002');
 						}
 					} else {
-						Errors.throwError(property, 'E_002');
+						Errors.throwError(property.name, 'E_001');
 					}
-				} else {
-					Errors.throwError(property, 'E_001');
-				}
+				});
+				return true;
 			}
 		}, {
 			key: 'setListeners',
