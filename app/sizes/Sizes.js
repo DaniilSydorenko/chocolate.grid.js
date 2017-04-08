@@ -2,8 +2,7 @@
 
 class Sizes {
 	constructor() {
-		this._height = window.innerHeight;
-		this._width = window.innerWidth;
+
 	}
 
 	getResponsiveColumnNumber() {

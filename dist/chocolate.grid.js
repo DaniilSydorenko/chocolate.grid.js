@@ -150,9 +150,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var Sizes = function () {
 		function Sizes() {
 			_classCallCheck(this, Sizes);
-
-			this._height = window.innerHeight;
-			this._width = window.innerWidth;
 		}
 
 		_createClass(Sizes, [{

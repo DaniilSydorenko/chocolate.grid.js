@@ -4,7 +4,7 @@
   "description": "Frontend layout implemented in grid based on JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jasmine-node spec"
   },
   "author": "Daniil Sydorenko",
   "license": "MIT",
@@ -30,5 +30,8 @@
     "js-grid",
     "front-end",
     "layout"
-  ]
+  ],
+  "dependencies": {
+    "jasmine-node": "^1.14.5"
+  }
 }
