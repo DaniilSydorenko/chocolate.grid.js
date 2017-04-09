@@ -2,7 +2,7 @@
 
 class Sizes {
 	constructor() {
-
+        // TODO
 	}
 
 	getResponsiveColumnNumber() {
@@ -14,7 +14,6 @@ class Sizes {
 	}
 
 	getContainerWidth(columnWidth, columnNumber, columnMargin) {
-		// Minus last right margin
 		return columnNumber * (columnWidth + columnMargin) - columnMargin;
 	}
 

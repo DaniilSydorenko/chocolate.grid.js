@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * Dependencies
- */
 const Sizes = require('../sizes/Sizes');
 const Styles = require('../styles/Styles');
 const Errors = require('../errors/Errors');

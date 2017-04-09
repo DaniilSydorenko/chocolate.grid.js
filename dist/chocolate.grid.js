@@ -149,6 +149,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	var Sizes = function () {
 		function Sizes() {
+			// TODO
+
 			_classCallCheck(this, Sizes);
 		}
 
@@ -165,7 +167,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'getContainerWidth',
 			value: function getContainerWidth(columnWidth, columnNumber, columnMargin) {
-				// Minus last right margin
 				return columnNumber * (columnWidth + columnMargin) - columnMargin;
 			}
 		}, {
@@ -313,7 +314,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			/**
     * Get every element{index:height} and return array of heights for every column
     *
-    * @param column
+    * @param column [{0: 190}, {1: 230}]
+    * @returns []
     */
 			value: function getMapOfHeightsForEveryColumn(column) {
 				var mapOfHeights = [];
@@ -363,7 +365,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						i = t;
 					}
 				}
-
 				return i;
 			}
 
@@ -435,10 +436,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /***/function (module, exports, __webpack_require__) {
 
 	'use strict';
-
-	/**
-  * Dependencies
-  */
 
 	var Sizes = __webpack_require__(2);
 	var Styles = __webpack_require__(3);

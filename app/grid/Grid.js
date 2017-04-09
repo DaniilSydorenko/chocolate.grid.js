@@ -4,7 +4,8 @@ class Grid {
 	/**
 	 * Get every element{index:height} and return array of heights for every column
 	 *
-	 * @param column
+	 * @param column [{0: 190}, {1: 230}]
+	 * @returns []
 	 */
 	getMapOfHeightsForEveryColumn(column) {
 		let mapOfHeights = [];
@@ -12,7 +13,6 @@ class Grid {
 			let index = Object.keys(indexHeight)[0];
 			mapOfHeights.push(parseInt(indexHeight[index]));
 		}
-
 		return mapOfHeights;
 	}
 
@@ -30,7 +30,6 @@ class Grid {
 				i = t;
 			}
 		}
-
 		return i;
 	}
 
