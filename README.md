@@ -1,9 +1,7 @@
 Chocolate.grid.js
 ========
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-
-[![Travis CI](https://travis-ci.org/DaniilSydorenko/chocolate.grid.js.svg?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)-] [![Travis CI](https://travis-ci.org/DaniilSydorenko/chocolate.grid.js.svg?branch=master)-]
 
 - [Introduction](#introduction)
 - [Installation](#installation)
