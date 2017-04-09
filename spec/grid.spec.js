@@ -2,51 +2,29 @@
 
 const grid = require('../app/grid/Grid');
 
-/** Tests for Grid **/
-
-describe("returns array with numbers", () => {
+describe("Test for Grid", () => {
     let mapOfHeights = [];
-
-    beforeEach(() => {
-        mapOfHeights = grid.getMapOfHeightsForEveryColumn([
-            { 0: 268 },
-            { 1: 494 },
-            { 2: 175 },
-            { 3: 350 },
-            { 4: 190 },
-            { 5: 275 }
-        ]);
-    });
-
-    it("returns array of numbers", () => expect(mapOfHeights).toEqual(jasmine.any(Array)));
-    it("type of number", () => expect(mapOfHeights[0]).toEqual(jasmine.any(Number)));
-});
-
-describe("returns array of numbers", () => {
-   let smallestIndex = null;
-
-   beforeEach(() => {
-       smallestIndex = grid.getIndexOfSmallestColumn([220, 310, 195, 455, 130]);
-   });
-
-   it("returns number", () => expect(smallestIndex).toEqual(jasmine.any(Number)));
-
-});
-
-describe("grid creation test", () => {
+    let smallestIndex = null;
     let fullGrid = {};
 
     beforeEach(() => {
-        fullGrid = grid.createGrid([
+        const arrayOfHeights = [
             { 0: 268 },
             { 1: 494 },
             { 2: 175 },
             { 3: 350 },
             { 4: 190 },
             { 5: 275 }
-        ], 3);
+        ];
+
+        mapOfHeights = grid.getMapOfHeightsForEveryColumn(arrayOfHeights);
+        smallestIndex = grid.getIndexOfSmallestColumn([220, 310, 195, 455, 130]);
+        fullGrid = grid.createGrid(arrayOfHeights, 3);
     });
 
-    it("returns object of arrays", () => expect(fullGrid).toEqual(jasmine.any(Object)));
-    it("returns array", () => expect(fullGrid[0]).toEqual(jasmine.any(Array)))
+    it("getMapOfHeightsForEveryColumn: returns array of numbers", () => expect(mapOfHeights).toEqual(jasmine.any(Array)));
+    it("getMapOfHeightsForEveryColumn: value type number", () => expect(mapOfHeights[0]).toEqual(jasmine.any(Number)));
+    it("getIndexOfSmallestColumn: returns number", () => expect(smallestIndex).toEqual(jasmine.any(Number)));
+    it("createGrid: returns object of arrays", () => expect(fullGrid).toEqual(jasmine.any(Object)));
+    it("createGrid: returns array", () => expect(fullGrid[0]).toEqual(jasmine.any(Array)))
 });

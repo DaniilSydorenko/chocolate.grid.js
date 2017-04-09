@@ -483,10 +483,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'setListeners',
-			value: function setListeners() {}
+			value: function setListeners() {
+				//TODO
+			}
 		}, {
 			key: 'resizeContainer',
-			value: function resizeContainer(params) {}
+			value: function resizeContainer(params) {
+				//TODO
+			}
 		}]);
 
 		return Main;

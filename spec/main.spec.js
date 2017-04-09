@@ -1,22 +1,8 @@
 "use strict";
 
-const errors = require('../app/errors/Errors');
-const grid = require('../app/grid/Grid');
 const main = require('../app/main/Main');
-const sizes = require('../app/sizes/Sizes');
-const styles = require('../app/styles/Styles');
 
-/** Tests for Error **/
-
-describe("errors", () => {
-
-});
-
-const html = [];
-let item1 = "<div class='js-item' style='width: 250px; height: 320px'></div>";
-let item2 = "<div class='js-item'></div>";
-
-describe("parameters checking test", () => {
+describe("Tests for Main", () => {
     let params = {};
 
     beforeEach(() => {
@@ -29,7 +15,7 @@ describe("parameters checking test", () => {
         };
     });
 
-    it("return true", () => expect(main.parametersChecker(params)).toBeTruthy());
+    it("parametersChecker: returns true", () => expect(main.parametersChecker(params)).toBeTruthy());
 });
 
 
