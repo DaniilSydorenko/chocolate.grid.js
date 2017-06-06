@@ -32,26 +32,20 @@ class Styles {
 		const grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
 
 		// Get items and container
-		var items = document.querySelectorAll(params.itemSelector);
-		var container = document.querySelector(params.containerSelector);
-		var containerHeight = null;
+		let items = document.querySelectorAll(params.itemSelector);
+		let container = document.querySelector(params.containerSelector);
+		let containerHeight = null;
 
 		for (let col in grid) {
 			if (grid.hasOwnProperty(col)) {
-				var column = grid[col];
-				var positionTop = 0;
-				var fullSumOfHeights = 0;
+				let column = grid[col];
+				let positionTop = 0;
+				let fullSumOfHeights = 0;
 
 				for (let e = 0; e < column.length; e++) {
-					var item = column[e];
+					let item = column[e];
 					for (let index in item) {
 						if (item.hasOwnProperty(index)) {
-
-                            // items[index].style.width = params.itemWidth + "px"; // item width
-                            // items[index].style.position = "absolute"; // item position
-                            // items[index].style.opacity = 0;
-                            // items[index].style.transition = "all ease .5s"; // animation
-
 							items[index].style.top = positionTop + (params.itemMargin * e) + "px";
 							items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
 
@@ -77,7 +71,6 @@ class Styles {
 		container.style.marginRight = "auto"; // depends of size, if not 100%
 		container.style.height = containerHeight + 'px';
 		container.style.width = params.containerFullWidth + 'px';
-
 	}
 }
 

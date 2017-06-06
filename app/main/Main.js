@@ -46,16 +46,43 @@ class Main {
                 Errors.throwError(property.name, 'E_001');
             }
         });
-        return true;
+        return params;
     }
 
-    setListeners() {
-        //TODO
+    incomingData(containerWidth, options, items) {
+        let numbers = Sizes.getHeightOfItems(items);
+        let columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
+        let containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
+
+        return {
+            itemsHeight: numbers,
+            columnsNumber: columns,
+            itemSelector: options.itemSelector,
+            itemWidth: options.columnWidth,
+            itemMargin: options.columnMargin,
+            containerSelector: options.containerSelector,
+            containerFullWidth: containerFullWidth
+        };
     }
 
-    resizeContainer(params) {
-        //TODO
+    runResize(items, options) {
+        let setSize = () => {
+            if (window.innerWidth <= options.containerMaxWidth) {
+                Styles.replaceItems(this.incomingData(window.innerWidth - (options.columnWidth / 2), options, items));
+            } else {
+                Styles.replaceItems(this.incomingData(options.containerMaxWidth - (options.columnWidth / 2), options, items));
+            }
+
+            for (let ai = 0; ai < items.length; ai++) {
+                items[ai].style.opacity = 1; // fade in effect
+            }
+        };
+
+        setSize(); // First call
+
+        window.addEventListener('resize', setSize); // Set listener
     }
+
 }
 
 module.exports = new Main();

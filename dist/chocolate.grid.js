@@ -67,141 +67,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	'use strict';
 
-	/**
-  * Dependencies
-  */
-
-	var Sizes = __webpack_require__(2);
-	var Styles = __webpack_require__(3);
-	var Grid = __webpack_require__(4);
-	var Main = __webpack_require__(5);
+	var Styles = __webpack_require__(2);
+	var Main = __webpack_require__(4);
 
 	module.exports = function Chocolate(params) {
 		_classCallCheck(this, Chocolate);
 
-		var options = {};
-
-		if (Main.parametersChecker(params)) {
-			Object.assign(options, params);
-		}
-
+		var options = Main.parametersChecker(params);
 		var items = document.querySelectorAll(".js-item");
 		var gridContainer = document.querySelector('.js-chocolate');
 
+		// *********** Set styles *********** //
 		Styles.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
 
-		// @TODO replace
-		var sizesForGrid = function sizesForGrid(containerWidth) {
-			var numbers = Sizes.getHeightOfItems(items);
-			var columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
-			var containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
-
-			return {
-				numbers: numbers,
-				columns: columns,
-				containerFullWidth: containerFullWidth
-			};
-		};
-
-		// @TODO replace
-		function replaceItemsWrapper(options, container) {
-			var sizes = sizesForGrid(container);
-
-			Styles.replaceItems({
-				itemsHeight: sizes.numbers,
-				columnsNumber: sizes.columns,
-				itemSelector: options.itemSelector,
-				itemWidth: options.columnWidth,
-				itemMargin: options.columnMargin,
-				containerSelector: options.containerSelector,
-				containerFullWidth: sizes.containerFullWidth
-			});
-		}
-
 		// *********** Resize *********** //
-		setSize(); // First call
-
-		window.addEventListener('resize', setSize);
-
-		var tempResize = window.innerWidth; // Remember temporary width of window
-
-		function setSize() {
-			if (window.innerWidth <= options.containerMaxWidth) {
-				replaceItemsWrapper(options, window.innerWidth - options.columnWidth / 2);
-				tempResize = window.innerWidth;
-			} else {
-				replaceItemsWrapper(options, options.containerMaxWidth - options.columnWidth / 2);
-			}
-
-			for (var ai = 0; ai < items.length; ai++) {
-				items[ai].style.opacity = 1; // fade in effect
-			}
-		}
-		// *********** Resize END *********** //
+		Main.runResize(items, options);
 	};
 
 	/***/
 },
 /* 2 */
-/***/function (module, exports) {
-
-	'use strict';
-
-	var Sizes = function () {
-		function Sizes() {
-			// TODO
-
-			_classCallCheck(this, Sizes);
-		}
-
-		_createClass(Sizes, [{
-			key: 'getResponsiveColumnNumber',
-			value: function getResponsiveColumnNumber() {
-				// TODO
-			}
-		}, {
-			key: 'getColumnNumber',
-			value: function getColumnNumber(containerWidth, columnWidth) {
-				return Math.floor(containerWidth / columnWidth);
-			}
-		}, {
-			key: 'getContainerWidth',
-			value: function getContainerWidth(columnWidth, columnNumber, columnMargin) {
-				return columnNumber * (columnWidth + columnMargin) - columnMargin;
-			}
-		}, {
-			key: 'getHeightOfItems',
-			value: function getHeightOfItems(items) {
-				var numbers = [];
-				for (var index = 0; index < items.length; index++) {
-					numbers.push(_defineProperty({}, index, items[index].clientHeight));
-				}
-				return numbers;
-			}
-		}, {
-			key: 'getItemsWidth',
-			value: function getItemsWidth(items) {
-				var numbers = [];
-				for (var index = 0; index < items.length; index++) {
-					numbers.push(_defineProperty({}, index, items[index].clientWidth));
-				}
-				return numbers;
-			}
-		}]);
-
-		return Sizes;
-	}();
-
-	module.exports = new Sizes();
-
-	/***/
-},
-/* 3 */
 /***/function (module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Grid = __webpack_require__(4);
+	var Grid = __webpack_require__(3);
 
 	var Styles = function () {
 		function Styles() {
@@ -257,12 +147,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							var item = column[e];
 							for (var index in item) {
 								if (item.hasOwnProperty(index)) {
-
-									// items[index].style.width = params.itemWidth + "px"; // item width
-									// items[index].style.position = "absolute"; // item position
-									// items[index].style.opacity = 0;
-									// items[index].style.transition = "all ease .5s"; // animation
-
 									items[index].style.top = positionTop + params.itemMargin * e + "px";
 									items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
 
@@ -298,7 +182,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	/***/
 },
-/* 4 */
+/* 3 */
 /***/function (module, exports) {
 
 	'use strict';
@@ -432,13 +316,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	/***/
 },
-/* 5 */
+/* 4 */
 /***/function (module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Sizes = __webpack_require__(2);
-	var Styles = __webpack_require__(3);
+	var Sizes = __webpack_require__(5);
+	var Styles = __webpack_require__(2);
 	var Errors = __webpack_require__(6);
 
 	var Main = function () {
@@ -479,17 +363,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						Errors.throwError(property.name, 'E_001');
 					}
 				});
-				return true;
+				return params;
 			}
 		}, {
-			key: 'setListeners',
-			value: function setListeners() {
-				//TODO
+			key: 'incomingData',
+			value: function incomingData(containerWidth, options, items) {
+				var numbers = Sizes.getHeightOfItems(items);
+				var columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
+				var containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
+
+				return {
+					itemsHeight: numbers,
+					columnsNumber: columns,
+					itemSelector: options.itemSelector,
+					itemWidth: options.columnWidth,
+					itemMargin: options.columnMargin,
+					containerSelector: options.containerSelector,
+					containerFullWidth: containerFullWidth
+				};
 			}
 		}, {
-			key: 'resizeContainer',
-			value: function resizeContainer(params) {
-				//TODO
+			key: 'runResize',
+			value: function runResize(items, options) {
+				var _this = this;
+
+				var setSize = function setSize() {
+					if (window.innerWidth <= options.containerMaxWidth) {
+						Styles.replaceItems(_this.incomingData(window.innerWidth - options.columnWidth / 2, options, items));
+					} else {
+						Styles.replaceItems(_this.incomingData(options.containerMaxWidth - options.columnWidth / 2, options, items));
+					}
+
+					for (var ai = 0; ai < items.length; ai++) {
+						items[ai].style.opacity = 1; // fade in effect
+					}
+				};
+
+				setSize(); // First call
+
+				window.addEventListener('resize', setSize); // Set listener
 			}
 		}]);
 
@@ -497,6 +409,60 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}();
 
 	module.exports = new Main();
+
+	/***/
+},
+/* 5 */
+/***/function (module, exports) {
+
+	'use strict';
+
+	var Sizes = function () {
+		function Sizes() {
+			// TODO
+
+			_classCallCheck(this, Sizes);
+		}
+
+		_createClass(Sizes, [{
+			key: 'getResponsiveColumnNumber',
+			value: function getResponsiveColumnNumber() {
+				// TODO
+			}
+		}, {
+			key: 'getColumnNumber',
+			value: function getColumnNumber(containerWidth, columnWidth) {
+				return Math.floor(containerWidth / columnWidth);
+			}
+		}, {
+			key: 'getContainerWidth',
+			value: function getContainerWidth(columnWidth, columnNumber, columnMargin) {
+				return columnNumber * (columnWidth + columnMargin) - columnMargin;
+			}
+		}, {
+			key: 'getHeightOfItems',
+			value: function getHeightOfItems(items) {
+				var numbers = [];
+				for (var index = 0; index < items.length; index++) {
+					numbers.push(_defineProperty({}, index, items[index].clientHeight));
+				}
+				return numbers;
+			}
+		}, {
+			key: 'getItemsWidth',
+			value: function getItemsWidth(items) {
+				var numbers = [];
+				for (var index = 0; index < items.length; index++) {
+					numbers.push(_defineProperty({}, index, items[index].clientWidth));
+				}
+				return numbers;
+			}
+		}]);
+
+		return Sizes;
+	}();
+
+	module.exports = new Sizes();
 
 	/***/
 },
