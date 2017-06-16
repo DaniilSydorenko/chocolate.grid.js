@@ -1,3 +1,10 @@
 language: node_js
+
 node_js:
-  - "6"
+  - stable
+
+install:
+  - npm install
+
+script:
+  - npm test
