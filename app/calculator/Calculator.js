@@ -88,19 +88,19 @@ class Sizes {
      * @return {Array}
      */
     getSumOfHeightsForColumns (grid, gridLength) {
-        let data = []
+        let data = [];
         for (let c = 0; c < gridLength; c++) {
             let mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c])
             if (mapOfHeights.length === 1) {
-                data.push(mapOfHeights[0])
+                data.push(mapOfHeights[0]);
             } else if (mapOfHeights.length > 1) {
                 let total = mapOfHeights.reduce(function (a, b) {
-                    return a + b
+                    return a + b;
                 })
-                data.push(total)
+                data.push(total);
             }
         }
-        return data
+        return data;
     }
 }
 
