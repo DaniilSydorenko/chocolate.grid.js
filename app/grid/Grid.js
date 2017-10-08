@@ -1,90 +1,67 @@
-'use strict';
+import Styles from '../styles/Styles';
+import Calculator from '../calculator/Calculator';
 
 class Grid {
-	/**
-	 * Get every element{index:height} and return array of heights for every column
-	 *
-	 * @param column [{0: 190}, {1: 230}]
-	 * @returns []
-	 */
-	getMapOfHeightsForEveryColumn(column) {
-		let mapOfHeights = [];
-		for (let indexHeight of column) {
-			let index = Object.keys(indexHeight)[0];
-			mapOfHeights.push(parseInt(indexHeight[index]));
-		}
-		return mapOfHeights;
-	}
+    /**
+     * Calculate heights, sort the elements and return grid of elements
+     * @param params
+     * @param items
+     * @param container
+     * @returns {{}}
+     */
+    constructor (params, items, container) {
+        let elementsOfGrid = params.itemsHeight
+        let numberOfColumns = params.columnsNumber
 
-	/**
-	 * Return index of column with smallest sum
-	 *
-	 * @param storage
-	 */
-	getIndexOfSmallestColumn(storage) {
-		let i = 0;
-		let	v = storage[0];
-		for (let t = 1; t < storage.length; t++) {
-			if (storage[t] < v) {
-				v = storage[t];
-				i = t;
-			}
-		}
-		return i;
-	}
+        const numberOfElementsInGrid = elementsOfGrid.length,
+            grid = {}
 
-	/**
-	 * Make me magic here please and create grid :)
-	 *
-	 * @param elementsOfGrid
-	 * @param columns
-	 * @returns {{}}
-	 */
-	createGrid(elementsOfGrid, columns) {
-		const elementsCount = elementsOfGrid.length,
-			grid = {};
+        // Set columns amount
+        for (let j = 0; j < numberOfColumns; j++) {
+            grid[j] = []
+        }
 
-		// Set columns amount
-		for (let j = 0; j < columns; j++) {
-			grid[j] = [];
-		}
+        let sumOfHeightsForColumns = 0;
+        let indexOfSmallestColumn = 0;
+        let maxSumColHeight = null
 
-		const gridLength = Object.keys(grid).length;
+        for (let i = 0; i < numberOfElementsInGrid; i++) {
+            for (let col = 0; col < numberOfColumns && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
+                let elementOfGrid = elementsOfGrid.splice(0, 1)[0] // Grab first element till zero length
 
-		for (let i = 0; i < elementsCount; i++) {
-			for (let col = 0; col < gridLength && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
-				let elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
-				if (elementOfGrid) { // Here start to fill columns by elements
-					if (grid[col].length === 0) {
-						grid[col].push(elementOfGrid); // Push element if column is empty
+                if (elementOfGrid) { // Here start to fill columns by elements
+                    const item = items[Object.keys(elementOfGrid)[0]];
 
-					} else if (grid[col].length > 0) { // if not empty should detect smallest column
-						let elementsSumStorage = []; // Store sum of heights for all counted elements
+                    if (grid[col].length === 0) { // Push first element if column is empty
+                        Styles.setItemStyles(item, 0, (params.itemWidth + params.itemMargin) * col); // Set item of grid styles
+                        grid[col].push(elementOfGrid)
 
-						for (let c = 0; c < gridLength; c++) {
-							let mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[c]);
+                    } else if (grid[col].length > 0) { // if not empty should detect smallest column
+                        sumOfHeightsForColumns = Calculator.getSumOfHeightsForColumns(grid, numberOfColumns);
+                        indexOfSmallestColumn = Calculator.getIndexOfSmallestColumn(sumOfHeightsForColumns);
 
-							if (mapOfHeights.length === 1) {
-								elementsSumStorage.push(mapOfHeights[0]);
+                        /*** Set item of grid styles ***/
+                        Styles.setItemStyles(
+                            item,
+                            sumOfHeightsForColumns[indexOfSmallestColumn] + (params.itemMargin * grid[indexOfSmallestColumn].length),
+                            (params.itemWidth + params.itemMargin) * indexOfSmallestColumn
+                        );
 
-							} else if (mapOfHeights.length > 1) {
-								let total = mapOfHeights.reduce(function (a, b) {
-									return a + b;
-								});
-								elementsSumStorage.push(total);
-							}
-						}
+                        grid[indexOfSmallestColumn].push(elementOfGrid); // Add next element to the smallest column
+                    }
+                }
+            }
 
-						let indexOfSmallestColumn = this.getIndexOfSmallestColumn(elementsSumStorage);
-						grid[indexOfSmallestColumn].push(elementOfGrid); // Insert value to the smallest column
-					}
-				}
-			}
-		}
+            /*** Set height of chocolate container ***/
+            sumOfHeightsForColumns = Calculator.getSumOfHeightsForColumns(grid, numberOfColumns);
+            let maxVal = Math.max(...sumOfHeightsForColumns);
+            let colIndex = sumOfHeightsForColumns.indexOf(maxVal);
+            maxSumColHeight = maxVal + grid[colIndex].length * params.itemMargin;
+        }
 
-		return grid; // Finally we got a grid with sorted elements
-	}
-
+        /*** Set width, height and margin of container ***/
+        Styles.setContainerStyles(container, maxSumColHeight, params.containerFullWidth);
+    }
 }
 
-module.exports = new Grid();
+export default Grid;

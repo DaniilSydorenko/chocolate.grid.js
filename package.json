@@ -1,28 +1,28 @@
 {
   "name": "chocolate.grid.js",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "description": "Frontend layout implemented in grid based on JavaScript",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf dist",
+    "dev": "webpack --watch && webpack-dev-server",
+    "build": "npm run clean && NODE_ENV=\"production\" && webpack",
     "test": "./node_modules/.bin/jasmine-node spec"
   },
   "author": "Daniil Sydorenko",
   "license": "MIT",
   "devDependencies": {
-    "babel-preset-es2015": "^6.16.0",
-    "browserify": "^13.1.0",
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^2.0.1",
-    "gulp-util": "^3.0.8",
-    "gulp-watch": "^4.3.11",
-    "instafeed.js": "^1.4.1",
-    "webpack": "^1.13.2",
-    "webpack-stream": "^3.2.0"
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^4.6.1",
+    "path": "^0.12.7",
+    "run-sequence": "^2.1.0",
+    "webpack": "^3.0.0-rc.2",
+    "webpack-dev-server": "^2.8.2"
   },
   "keywords": [
     "javascript",
@@ -32,6 +32,7 @@
     "layout"
   ],
   "dependencies": {
-    "jasmine-node": "^1.14.5"
+    "jasmine-node": "^1.14.5",
+    "rxjs": "^5.4.3"
   }
 }

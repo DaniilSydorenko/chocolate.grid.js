@@ -1,4 +1,5 @@
-'use strict';
+import Chocolate from './app/Chocolate';
 
-window.Chocolate = require('./app/Chocolate.js');
+window.Chocolate = Chocolate;
 
+export default Chocolate;

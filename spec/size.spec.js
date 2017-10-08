@@ -1,6 +1,6 @@
 "use strict";
 
-const sizes = require('../app/sizes/Sizes');
+const sizes = require('./Sizes');
 
 describe("Tests for Sizes", () => {
     beforeEach(() => {

@@ -1,12 +1,7 @@
-'use strict';
-
-const Grid = require('../grid/Grid');
-
 class Styles {
 
 	/**
 	 * Good way to set styles on items before grid is ready
-	 *
 	 * @param items
 	 * @param itemWidth
 	 * @param container
@@ -17,61 +12,34 @@ class Styles {
 		for (let e = 0; e < items.length; e++) {
 			items[e].style.width = itemWidth + "px"; // item width
 			items[e].style.position = "absolute"; // item position
-			items[e].style.opacity = 0;
             items[e].style.transition = "all ease .5s"; // animation
         }
 	}
 
-	/**
-	 * Replace all items in the grid
-	 *
-	 * @param params
-	 */
-	replaceItems(params) {
-		// Get grid
-		const grid = Grid.createGrid(params.itemsHeight, params.columnsNumber);
+    /**
+	 * Set width, height and margin of container
+     * @param container
+     * @param height
+     * @param width
+     */
+    setContainerStyles(container, height, width) {
+        container.style.position = 'relative';
+        container.style.marginLeft = 'auto'; // depends of size, if not 100%
+        container.style.marginRight = 'auto'; // depends of size, if not 100%
+        container.style.height = `${height}px`;
+        container.style.width = `${width}px`;
+    }
 
-		// Get items and container
-		let items = document.querySelectorAll(params.itemSelector);
-		let container = document.querySelector(params.containerSelector);
-		let containerHeight = null;
-
-		for (let col in grid) {
-			if (grid.hasOwnProperty(col)) {
-				let column = grid[col];
-				let positionTop = 0;
-				let fullSumOfHeights = 0;
-
-				for (let e = 0; e < column.length; e++) {
-					let item = column[e];
-					for (let index in item) {
-						if (item.hasOwnProperty(index)) {
-							items[index].style.top = positionTop + (params.itemMargin * e) + "px";
-							items[index].style.left = (params.itemWidth + params.itemMargin) * col + "px";
-
-							//items[index].style.transform =
-							//	"matrix(1, 0, 0, 1, " +
-							//	((params.itemWidth + params.itemMargin) * col) + ", " + // Left
-							//	(positionTop + (params.itemMargin * e)) + ")"; // Top
-
-							positionTop += item[index]; // Sum of heights for top position of next item
-							fullSumOfHeights += (item[index] + params.itemMargin); // Sum of all items heights and margins for current column
-						}
-					}
-				}
-
-				if (containerHeight === null || containerHeight < fullSumOfHeights) {
-					containerHeight = fullSumOfHeights;
-				}
-			}
-		}
-
-		container.style.position = "relative";
-		container.style.marginLeft = "auto"; // depends of size, if not 100%
-		container.style.marginRight = "auto"; // depends of size, if not 100%
-		container.style.height = containerHeight + 'px';
-		container.style.width = params.containerFullWidth + 'px';
+    /**
+	 * Set item of grid styles
+     * @param item
+     * @param top
+     * @param left
+     */
+    setItemStyles(item, top, left) {
+        item.style.top = `${top}px`;
+        item.style.left = `${left}px`;
 	}
 }
 
-module.exports = new Styles();
+export default new Styles();

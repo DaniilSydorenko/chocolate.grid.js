@@ -1,88 +1,41 @@
-'use strict';
+import { Observable } from 'rxjs/Rx'
+import Grid from '../grid/Grid'
+import Helper from '../helper/Helper'
 
-const Sizes = require('../sizes/Sizes');
-const Styles = require('../styles/Styles');
-const Errors = require('../errors/Errors');
+// TODO new properties: animationSpeed, (inline styles ???),
+// TODO ensure if some param is empty
+// TODO full size of container
 
 class Main {
-
-    constructor() {
-        this.properties = [
-            {
-                name: 'containerSelector',
-                type: 'string'
-            },
-            {
-                name: 'containerMaxWidth',
-                type: 'number'
-            },
-            {
-                name: 'itemSelector',
-                type: 'string'
-            },
-            {
-                name: 'columnWidth',
-                type: 'number'
-            },
-            {
-                name: 'columnMargin',
-                type: 'number'
-            },
-        ]
-    }
-
-    parametersChecker(params) {
-        this.properties.map(function (property) {
-            if (params.hasOwnProperty(property.name)) {
-                if (typeof params[property.name] === property.type) {
-                    if (params[property.name] === undefined && params[property.name] === null &&
-                        params[property.name] === false && params[property.name] === '') {
-                        Errors.throwError(property.name, 'E_003');
-                    }
-                } else {
-                    Errors.throwError(property.name, 'E_002');
-                }
-            } else {
-                Errors.throwError(property.name, 'E_001');
-            }
-        });
-        return params;
-    }
-
-    incomingData(containerWidth, options, items) {
-        let numbers = Sizes.getHeightOfItems(items);
-        let columns = Sizes.getColumnNumber(containerWidth, options.columnWidth);
-        let containerFullWidth = Sizes.getContainerWidth(options.columnWidth, columns, options.columnMargin);
-
-        return {
-            itemsHeight: numbers,
-            columnsNumber: columns,
-            itemSelector: options.itemSelector,
-            itemWidth: options.columnWidth,
-            itemMargin: options.columnMargin,
-            containerSelector: options.containerSelector,
-            containerFullWidth: containerFullWidth
-        };
-    }
-
-    runResize(items, options) {
-        let setSize = () => {
+    runResize (items, container, options) {
+        const setSize = () => {
             if (window.innerWidth <= options.containerMaxWidth) {
-                Styles.replaceItems(this.incomingData(window.innerWidth - (options.columnWidth / 2), options, items));
+                new Grid(
+                    Helper.incomingData(window.innerWidth - (options.columnWidth / 2), options, items),
+                    items,
+                    container
+                )
             } else {
-                Styles.replaceItems(this.incomingData(options.containerMaxWidth - (options.columnWidth / 2), options, items));
+                new Grid(
+                    Helper.incomingData(options.containerMaxWidth - (options.columnWidth / 2), options, items),
+                    items,
+                    container
+                )
             }
 
-            for (let ai = 0; ai < items.length; ai++) {
-                items[ai].style.opacity = 1; // fade in effect
-            }
-        };
+            // for (let ai = 0; ai < items.length; ai++) {
+            //     items[ai].style.opacity = 1 // fade in effect
+            // }
+        }
 
-        setSize(); // First call
-
-        window.addEventListener('resize', setSize); // Set listener
+        // Event Observer
+        Observable.fromEvent(window, 'resize')
+            .map(window => window.target.innerWidth)
+            .startWith(window.innerWidth)
+            .do(() => { setSize(); })
+            .subscribe();
     }
 
 }
 
-module.exports = new Main();
+export default new Main()
