@@ -70,15 +70,15 @@ class Sizes {
      * @return {number}
      */
     getIndexOfSmallestColumn (allColumns) {
-        let i = 0
-        let v = allColumns[0]
+        let i = 0;
+        let v = allColumns[0];
         for (let t = 1; t < allColumns.length; t++) {
             if (allColumns[t] < v) {
-                v = allColumns[t]
-                i = t
+                v = allColumns[t];
+                i = t;
             }
         }
-        return i
+        return i;
     }
 
     /**
