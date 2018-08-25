@@ -15,17 +15,6 @@ const plugins = [
     })
 ];
 
-const rules = [
-    {
-        test: /\.js$/,
-        exclude: [/node_modules/],
-        use: [{
-            loader: 'babel-loader',
-            options: { presets: ['es2015'] },
-        }],
-    }
-];
-
 if (production) {
     plugins.push(
         new webpack.optimize.UglifyJsPlugin({
@@ -54,8 +43,15 @@ module.exports = {
         filename: "[name].js"
     },
     module: {
-        rules
-    },
+		loaders: [{
+			test: /\.js$/,
+			loader: 'babel-loader',
+			query: {
+				presets: ['es2015'],
+				plugins: ["babel-plugin-transform-class-properties"]
+			}
+		}]
+	},
     plugins,
     devtool: 'source-map',
     devServer: {

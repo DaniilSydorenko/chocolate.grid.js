@@ -1,77 +1,77 @@
-import Calculator from '../calculator/Calculator';
-import Errors from '../errors/Errors';
+import Errors from '../errors/Errors'
 
 class Helper {
-    constructor () {
-        this.properties = [
-            {
-                name: 'containerSelector',
-                type: 'string'
-            },
-            {
-                name: 'containerMaxWidth',
-                type: 'number'
-            },
-            {
-                name: 'itemSelector',
-                type: 'string'
-            },
-            {
-                name: 'columnWidth',
-                type: 'number'
-            },
-            {
-                name: 'columnMargin',
-                type: 'number'
-            },
-        ]
-    }
-
-    /**
-     *
-     * @param params
-     * @return {*}
-     */
-    parametersChecker (params) {
-        this.properties.map(function (property) {
-            if (params.hasOwnProperty(property.name)) {
-                if (typeof params[property.name] === property.type) {
-                    if (params[property.name] === undefined && params[property.name] === null &&
-                        params[property.name] === false && params[property.name] === '') {
-                        Errors.throwError(property.name, 'E_003')
-                    }
-                } else {
-                    Errors.throwError(property.name, 'E_002')
-                }
-            } else {
-                Errors.throwError(property.name, 'E_001')
-            }
-        })
-        return params
-    }
-
-    /**
-     *
-     * @param containerWidth
-     * @param options
-     * @param items
-     * @return {{itemsHeight: Array, columnsNumber: number, itemSelector: (*|string), itemWidth: (number|*), itemMargin: number, containerSelector: (*|string), containerFullWidth: number}}
-     */
-    incomingData (containerWidth, options, items) {
-        const numbers = Calculator.getHeightOfItems(items)
-        const columns = Calculator.getColumnNumber(containerWidth, options.columnWidth)
-        const containerFullWidth = Calculator.getContainerWidth(options.columnWidth, columns, options.columnMargin)
-
-        return {
-            itemsHeight: numbers,
-            columnsNumber: columns,
-            itemSelector: options.itemSelector,
-            itemWidth: options.columnWidth,
-            itemMargin: options.columnMargin,
-            containerSelector: options.containerSelector,
-            containerFullWidth: containerFullWidth
-        }
-    }
+	getColumnNumber = (containerWidth, columnWidth) => Math.floor(containerWidth / columnWidth);
+	
+	getContainerWidth = (columnWidth, columnNumber, columnMargin) => columnNumber * (columnWidth + columnMargin) - columnMargin;
+	
+	getIndexOfSmallestColumn = (allColumns) => allColumns.indexOf(Math.min(...allColumns));
+	
+	getMapOfHeightsForEveryColumn = (column) => column.map(e => parseInt(e[Object.keys(e)[0]]));
+	
+	getHeightOfItems (items) {
+		const numbers = []
+		items.forEach((e, i) => {
+			numbers.push({
+				[i]: e.clientHeight
+			})
+		})
+		return numbers
+	}
+	
+	getSumOfHeightsForColumns (grid) {
+		return Object.keys(grid).map(i => {
+			let mapOfHeights = this.getMapOfHeightsForEveryColumn(grid[i])
+			if (mapOfHeights.length === 1) {
+				return mapOfHeights[0]
+			} else if (mapOfHeights.length > 1) {
+				return mapOfHeights.reduce(function (a, b) {
+					return a + b
+				})
+			}
+		})
+	}
+	
+	parametersChecker (params) {
+		const properties = [
+			{name: 'containerSelector', type: 'string'},
+			{name: 'containerMaxWidth', type: 'number'},
+			{name: 'itemSelector', type: 'string'},
+			{name: 'columnWidth', type: 'number'},
+			{name: 'columnMargin', type: 'number'}
+		]
+		
+		properties.map(function (property) {
+			if (params.hasOwnProperty(property.name)) {
+				if (typeof params[property.name] === property.type) {
+					if (params[property.name] === undefined && params[property.name] === null &&
+						params[property.name] === false && params[property.name] === '') {
+						Errors.throwError(property.name, 'E_003')
+					}
+				} else {
+					Errors.throwError(property.name, 'E_002')
+				}
+			} else {
+				Errors.throwError(property.name, 'E_001')
+			}
+		})
+		return params
+	}
+	
+	incomingData (containerWidth, options, items) {
+		const numbers = this.getHeightOfItems(items)
+		const columns = this.getColumnNumber(containerWidth, options.columnWidth)
+		const containerFullWidth = this.getContainerWidth(options.columnWidth, columns, options.columnMargin)
+		return {
+			itemsHeight: numbers,
+			columnsNumber: columns,
+			itemSelector: options.itemSelector,
+			itemWidth: options.columnWidth,
+			itemMargin: options.columnMargin,
+			containerSelector: options.containerSelector,
+			containerFullWidth: containerFullWidth
+		}
+	}
 }
 
-export default new Helper();
+export default new Helper()

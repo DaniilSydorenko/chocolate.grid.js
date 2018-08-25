@@ -1,29 +1,26 @@
 import Styles from '../styles/Styles';
-import Calculator from '../calculator/Calculator';
+import Helper from '../helper/Helper';
 
 class Grid {
-    /**
-     * Calculate heights, sort the elements and return grid of elements
-     * @param params
-     * @param items
-     * @param container
-     * @returns {{}}
-     */
     constructor (params, items, container) {
+        this.setGridContainerStyles(params, container, this.createGrid(params, items))
+    }
+
+    createGrid(params, items) {
+        // TODO params destruction ?
+
         let elementsOfGrid = params.itemsHeight
         let numberOfColumns = params.columnsNumber
+        let indexOfSmallestColumn = 0;
+        let sumOfHeightsForColumns = 0;
 
-        const numberOfElementsInGrid = elementsOfGrid.length,
-            grid = {}
+        const numberOfElementsInGrid = elementsOfGrid.length;
+        const grid = {};
 
         // Set columns amount
         for (let j = 0; j < numberOfColumns; j++) {
             grid[j] = []
         }
-
-        let sumOfHeightsForColumns = 0;
-        let indexOfSmallestColumn = 0;
-        let maxSumColHeight = null
 
         for (let i = 0; i < numberOfElementsInGrid; i++) {
             for (let col = 0; col < numberOfColumns && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
@@ -37,8 +34,8 @@ class Grid {
                         grid[col].push(elementOfGrid)
 
                     } else if (grid[col].length > 0) { // if not empty should detect smallest column
-                        sumOfHeightsForColumns = Calculator.getSumOfHeightsForColumns(grid, numberOfColumns);
-                        indexOfSmallestColumn = Calculator.getIndexOfSmallestColumn(sumOfHeightsForColumns);
+                        sumOfHeightsForColumns = Helper.getSumOfHeightsForColumns(grid);
+                        indexOfSmallestColumn = Helper.getIndexOfSmallestColumn(sumOfHeightsForColumns);
 
                         /*** Set item of grid styles ***/
                         Styles.setItemStyles(
@@ -51,16 +48,21 @@ class Grid {
                     }
                 }
             }
-
-            /*** Set height of chocolate container ***/
-            sumOfHeightsForColumns = Calculator.getSumOfHeightsForColumns(grid, numberOfColumns);
-            let maxVal = Math.max(...sumOfHeightsForColumns);
-            let colIndex = sumOfHeightsForColumns.indexOf(maxVal);
-            maxSumColHeight = maxVal + grid[colIndex].length * params.itemMargin;
         }
 
-        /*** Set width, height and margin of container ***/
-        Styles.setContainerStyles(container, maxSumColHeight, params.containerFullWidth);
+        return grid;
+    }
+    
+    getContainerHeight(params, grid) {
+		let sumOfHeightsForColumns = Helper.getSumOfHeightsForColumns(grid);
+		let maxVal = Math.max(...sumOfHeightsForColumns);
+		let maxValColIndex = sumOfHeightsForColumns.indexOf(maxVal);
+		return maxVal + grid[maxValColIndex].length * params.itemMargin;
+    }
+
+    setGridContainerStyles(params, container, grid) {
+        // TODO MAYBE move set styles to main and leave in grid only calculation?
+        Styles.setContainerStyles(container, this.getContainerHeight(params, grid), params.containerFullWidth);
     }
 }
 
