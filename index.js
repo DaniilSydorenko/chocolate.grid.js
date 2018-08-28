@@ -1,5 +1,3 @@
-import Chocolate from './app/Chocolate';
+import Main from './app/main/Main';
 
-window.Chocolate = Chocolate;
-
-export default Chocolate;
+window.Chocolate = Main;

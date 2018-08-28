@@ -1,69 +1,50 @@
-import Styles from '../styles/Styles';
-import Helper from '../helper/Helper';
+import Styles from '../styles/Styles'
+import Utils from '../utils/Utils'
 
 class Grid {
-    constructor (params, items, container) {
-        this.setGridContainerStyles(params, container, this.createGrid(params, items))
-    }
-
-    createGrid(params, items) {
-        // TODO params destruction ?
-
-        let elementsOfGrid = params.itemsHeight
-        let numberOfColumns = params.columnsNumber
-        let indexOfSmallestColumn = 0;
-        let sumOfHeightsForColumns = 0;
-
-        const numberOfElementsInGrid = elementsOfGrid.length;
-        const grid = {};
-
-        // Set columns amount
-        for (let j = 0; j < numberOfColumns; j++) {
-            grid[j] = []
-        }
-
-        for (let i = 0; i < numberOfElementsInGrid; i++) {
-            for (let col = 0; col < numberOfColumns && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
-                let elementOfGrid = elementsOfGrid.splice(0, 1)[0] // Grab first element till zero length
-
-                if (elementOfGrid) { // Here start to fill columns by elements
-                    const item = items[Object.keys(elementOfGrid)[0]];
-
-                    if (grid[col].length === 0) { // Push first element if column is empty
-                        Styles.setItemStyles(item, 0, (params.itemWidth + params.itemMargin) * col); // Set item of grid styles
-                        grid[col].push(elementOfGrid)
-
-                    } else if (grid[col].length > 0) { // if not empty should detect smallest column
-                        sumOfHeightsForColumns = Helper.getSumOfHeightsForColumns(grid);
-                        indexOfSmallestColumn = Helper.getIndexOfSmallestColumn(sumOfHeightsForColumns);
-
-                        /*** Set item of grid styles ***/
-                        Styles.setItemStyles(
-                            item,
-                            sumOfHeightsForColumns[indexOfSmallestColumn] + (params.itemMargin * grid[indexOfSmallestColumn].length),
-                            (params.itemWidth + params.itemMargin) * indexOfSmallestColumn
-                        );
-
-                        grid[indexOfSmallestColumn].push(elementOfGrid); // Add next element to the smallest column
-                    }
-                }
-            }
-        }
-
-        return grid;
-    }
-    
-    getContainerHeight(params, grid) {
-		let sumOfHeightsForColumns = Helper.getSumOfHeightsForColumns(grid);
-		let maxVal = Math.max(...sumOfHeightsForColumns);
-		let maxValColIndex = sumOfHeightsForColumns.indexOf(maxVal);
-		return maxVal + grid[maxValColIndex].length * params.itemMargin;
-    }
-
-    setGridContainerStyles(params, container, grid) {
-        // TODO MAYBE move set styles to main and leave in grid only calculation?
-        Styles.setContainerStyles(container, this.getContainerHeight(params, grid), params.containerFullWidth);
-    }
+	constructor (params, items, container) {
+		Styles.setContainerStyles(
+			container,
+			Utils.getContainerHeight(params.columnMargin, this.createGrid(params, items)),
+			params.containerFullWidth
+		)
+	}
+	
+	createGrid (params, items) {
+		const {itemsHeight, columnsNumber, columnWidth, columnMargin} = params
+		let elementsOfGrid = itemsHeight
+		let indexOfSmallestColumn = 0
+		let sumOfHeightsForColumns = 0
+		
+		const numberOfElementsInGrid = elementsOfGrid.length
+		const grid = {}
+		
+		for (let j = 0; j < columnsNumber; j++) {
+			grid[j] = []
+		}
+		
+		for (let i = 0; i < numberOfElementsInGrid; i++) {
+			for (let col = 0; col < columnsNumber && elementsOfGrid.length > 0; col++) { // Till elements array will not be empty
+				let elementOfGrid = elementsOfGrid.splice(0, 1)[0] // Grab first element till zero length
+				if (elementOfGrid) { // Here start to fill columns by elements
+					const position = {top: 0, left: 0, index: col}
+					if (grid[col].length === 0) { // Push first element if column is empty
+						position.left = (columnWidth + columnMargin) * col
+					} else if (grid[col].length > 0) { // if not empty should detect smallest column
+						sumOfHeightsForColumns = Utils.getSumOfHeightsForColumns(grid)
+						indexOfSmallestColumn = Utils.getIndexOfSmallestColumn(sumOfHeightsForColumns)
+						position.top = sumOfHeightsForColumns[indexOfSmallestColumn]
+							+ (columnMargin * grid[indexOfSmallestColumn].length)
+						position.left = (columnWidth + columnMargin) * indexOfSmallestColumn
+						position.index = indexOfSmallestColumn
+					}
+					grid[position.index].push(elementOfGrid)
+					Styles.setItemStyles(items[Object.keys(elementOfGrid)[0]], position.top, position.left)
+				}
+			}
+		}
+		return grid
+	}
 }
 
-export default Grid;
+export default Grid
