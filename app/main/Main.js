@@ -1,41 +1,77 @@
-import { Observable } from 'rxjs/Rx'
+import { IndexHeightItem, Params, GridType } from '../types'
 import Grid from '../grid/Grid'
-import Helper from '../helper/Helper'
+import Utils from '../utils/Utils'
+import Styles from '../styles/Styles'
 
-// TODO new properties: animationSpeed, (inline styles ???),
-// TODO ensure if some param is empty
-// TODO full size of container
+// TODO: Horizontal grid
+// TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
+// TODO: TESTS
 
 class Main {
-    runResize (items, container, options) {
-        const setSize = () => {
-            if (window.innerWidth <= options.containerMaxWidth) {
-                new Grid(
-                    Helper.incomingData(window.innerWidth - (options.columnWidth / 2), options, items),
-                    items,
-                    container
-                )
-            } else {
-                new Grid(
-                    Helper.incomingData(options.containerMaxWidth - (options.columnWidth / 2), options, items),
-                    items,
-                    container
-                )
-            }
-
-            // for (let ai = 0; ai < items.length; ai++) {
-            //     items[ai].style.opacity = 1 // fade in effect
-            // }
-        }
-
-        // Event Observer
-        Observable.fromEvent(window, 'resize')
-            .map(window => window.target.innerWidth)
-            .startWith(window.innerWidth)
-            .do(() => { setSize(); })
-            .subscribe();
-    }
-
+	constructor (params: Params) {
+		const items = document.querySelectorAll('.chocolate-item');
+		const gridContainer = document.querySelector('.chocolate-container');
+		const {
+			columnWidth,
+			columnMargin,
+			containerMaxWidth,
+			transitionDuration,
+			transitionTimingFunction
+		} = params;
+		
+		Styles.setItemStylesBeforeGridCreated(
+			items,
+			columnWidth,
+			gridContainer,
+			containerMaxWidth,
+			transitionDuration,
+			transitionTimingFunction
+		);
+		
+		this.setSize(
+			containerMaxWidth,
+			columnWidth,
+			columnMargin,
+			items,
+			gridContainer
+		)();
+		
+		window.addEventListener(
+			'resize',
+			this.setSize(
+				containerMaxWidth,
+				columnWidth,
+				columnMargin,
+				items,
+				gridContainer
+			)
+		);
+	}
+	
+	setSize (containerMaxWidth: number,
+			 columnWidth: number,
+			 columnMargin: number,
+			 items: Array<HTMLElement>,
+			 gridContainer: HTMLElement) {
+		return function () {
+			const containerWidth = window.innerWidth <= containerMaxWidth
+				? window.innerWidth
+				: containerMaxWidth;
+			
+			const params = Utils.formatData(
+				containerWidth,
+				columnWidth,
+				columnMargin,
+				items
+			);
+			
+			new Grid(
+				params,
+				items,
+				gridContainer
+			);
+		}
+	}
 }
 
-export default new Main()
+export default Main;
