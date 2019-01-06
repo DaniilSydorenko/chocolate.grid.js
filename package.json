@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "npm run flow && webpack --watch && webpack-dev-server",
-    "flow-build": "babel src/ -d lib/",
+    "flow-build": "babel app/ -d lib/",
     "prepublish": "npm run flow-build",
     "build": "npm run clean && NODE_ENV=\"production\" && webpack",
     "flow": "flow",
