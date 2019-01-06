@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,72 +70,8 @@
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Styles = function () {
-  function Styles() {
-    _classCallCheck(this, Styles);
-  }
-
-  _createClass(Styles, [{
-    key: "setItemStylesBeforeGridCreated",
-
-    // TODO container style set in twi func - fix this !!
-
-    value: function setItemStylesBeforeGridCreated(items, width, container, containerMaxWidth) {
-      container.style.maxWidth = containerMaxWidth + "px";
-      for (var e = 0; e < items.length; e++) {
-        items[e].style.width = width + "px"; // item width
-        items[e].style.position = "absolute"; // item position
-        items[e].style.transition = "all ease .5s"; // animation
-      }
-    }
-  }, {
-    key: "setContainerStyles",
-    value: function setContainerStyles(container, height, width) {
-      container.style.position = 'relative';
-      container.style.marginLeft = 'auto'; // depends of size, if not 100%
-      container.style.marginRight = 'auto'; // depends of size, if not 100%
-      container.style.height = height + "px";
-      container.style.width = width + "px";
-    }
-  }, {
-    key: "setItemStyles",
-    value: function setItemStyles(item, top, left) {
-      item.style.top = top + "px";
-      item.style.left = left + "px";
-    }
-  }]);
-
-  return Styles;
-}();
-
-exports.default = new Styles();
-
 /***/ }),
-/* 1 */,
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Main = __webpack_require__(3);
-
-var _Main2 = _interopRequireDefault(_Main);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-window.Chocolate = _Main2.default;
-
-/***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -147,56 +83,168 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Grid = __webpack_require__(4);
-
-var _Grid2 = _interopRequireDefault(_Grid);
-
-var _Utils = __webpack_require__(6);
-
-var _Utils2 = _interopRequireDefault(_Utils);
-
-var _Styles = __webpack_require__(0);
-
-var _Styles2 = _interopRequireDefault(_Styles);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// TODO new properties: animationSpeed, fullSizeOfContainer, innerLeftRightMargin, innerBottomMargin
-// TODO: TESTS
-
-var Main = function () {
-	function Main(params) {
-		_classCallCheck(this, Main);
-
-		var options = _Utils2.default.guard(params);
-		var items = document.querySelectorAll(".js-item");
-		var gridContainer = document.querySelector('.js-chocolate');
-
-		_Styles2.default.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
-		this.execGridBuilder(items, gridContainer, options);
+var Styles = function () {
+	function Styles() {
+		_classCallCheck(this, Styles);
 	}
 
-	_createClass(Main, [{
-		key: 'execGridBuilder',
-		value: function execGridBuilder(items, container, options) {
-			function setSize() {
-				var containerWidth = window.innerWidth <= options.containerMaxWidth ? window.innerWidth : options.containerMaxWidth;
+	_createClass(Styles, [{
+		key: 'setItemStylesBeforeGridCreated',
+		value: function setItemStylesBeforeGridCreated(items, width, container, containerMaxWidth) {
+			var transitionDuration = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0.5;
+			var transitionTimingFunction = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'ease';
 
-				new _Grid2.default(_Utils2.default.formatData(containerWidth - options.columnWidth / 2, options, items), items, container);
-			}
-
-			setSize();
-
-			window.addEventListener('resize', setSize);
+			container.style.maxWidth = containerMaxWidth + 'px';
+			items.forEach(function (item, i) {
+				item.style.width = width + 'px';
+				item.style.position = "absolute";
+				item.style.transition = 'all ' + transitionTimingFunction + ' ' + transitionDuration + 's';
+				item.querySelector('.text').textContent = '' + i; // TEMPORARY
+			});
+		}
+	}, {
+		key: 'setContainerStyles',
+		value: function setContainerStyles(container, height, width) {
+			container.style.position = 'relative';
+			container.style.marginLeft = 'auto'; // depends of size, if not 100%
+			container.style.marginRight = 'auto'; // depends of size, if not 100%
+			container.style.height = height + 'px';
+			container.style.width = width + 'px';
+		}
+	}, {
+		key: 'setItemStyles',
+		value: function setItemStyles(item, top, left) {
+			item.style.top = top + 'px';
+			item.style.left = left + 'px';
 		}
 	}]);
 
-	return Main;
+	return Styles;
 }();
 
-exports.default = Main;
+exports.default = new Styles();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _types = __webpack_require__(0);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Utils = function () {
+	function Utils() {
+		_classCallCheck(this, Utils);
+
+		this.getColumnNumber = function (containerWidth, columnWidth, columnMargin) {
+			var scrollBarPixelWidth = 17;
+			var columnNumber = Math.floor((containerWidth + columnMargin - scrollBarPixelWidth) / (columnWidth + columnMargin));
+			return columnNumber === 0 ? 1 : columnNumber;
+		};
+
+		this.getContainerWidth = function (columnWidth, columnNumber, columnMargin) {
+			return columnNumber * (columnWidth + columnMargin) - columnMargin;
+		};
+
+		this.getIndexOfSmallestColumn = function (allColumns) {
+			return allColumns.indexOf(Math.min.apply(Math, _toConsumableArray(allColumns)));
+		};
+
+		this.getMapOfHeightsForEveryColumn = function (column) {
+			// $FlowFixMe
+			return column.map(function (e) {
+				return parseInt(e[Object.keys(e)[0]]);
+			});
+		};
+	}
+
+	_createClass(Utils, [{
+		key: 'getHeightOfItems',
+
+
+		// OBJECT ???
+		value: function getHeightOfItems(items) {
+			var numbers = [];
+			items.forEach(function (e, i) {
+				numbers.push(_defineProperty({}, i, e.offsetHeight));
+			});
+			return numbers;
+		}
+	}, {
+		key: 'getSumOfHeightsForColumns',
+		value: function getSumOfHeightsForColumns(grid) {
+			var _this = this;
+
+			// $FlowFixMe
+			return Object.keys(grid).map(function (i) {
+				var mapOfHeights = _this.getMapOfHeightsForEveryColumn(grid[parseInt(i)]);
+				if (mapOfHeights.length === 1) {
+					return mapOfHeights[0];
+				} else if (mapOfHeights.length > 1) {
+					return mapOfHeights.reduce(function (a, b) {
+						return a + b;
+					});
+				}
+			});
+		}
+	}, {
+		key: 'getContainerHeight',
+		value: function getContainerHeight(columnMargin, grid) {
+			var sumOfHeightsForColumns = this.getSumOfHeightsForColumns(grid);
+			// $FlowFixMe
+			var maxVal = Math.max.apply(Math, _toConsumableArray(sumOfHeightsForColumns));
+			return maxVal + grid[sumOfHeightsForColumns.indexOf(maxVal)].length * columnMargin;
+		}
+	}, {
+		key: 'formatData',
+		value: function formatData(containerWidth, columnWidth, columnMargin, items) {
+			var itemsHeight = this.getHeightOfItems(items);
+			var columnsNumber = this.getColumnNumber(containerWidth, columnWidth, columnMargin);
+			var containerFullWidth = this.getContainerWidth(columnWidth, columnsNumber, columnMargin);
+			return {
+				itemsHeight: itemsHeight,
+				columnsNumber: columnsNumber,
+				columnWidth: columnWidth,
+				columnMargin: columnMargin,
+				containerFullWidth: containerFullWidth
+			};
+		}
+	}]);
+
+	return Utils;
+}();
+
+exports.default = new Utils();
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Main = __webpack_require__(4);
+
+var _Main2 = _interopRequireDefault(_Main);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.Chocolate = _Main2.default;
 
 /***/ }),
 /* 4 */
@@ -211,11 +259,86 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Styles = __webpack_require__(0);
+var _types = __webpack_require__(0);
+
+var _Grid = __webpack_require__(5);
+
+var _Grid2 = _interopRequireDefault(_Grid);
+
+var _Utils = __webpack_require__(2);
+
+var _Utils2 = _interopRequireDefault(_Utils);
+
+var _Styles = __webpack_require__(1);
 
 var _Styles2 = _interopRequireDefault(_Styles);
 
-var _Utils = __webpack_require__(6);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// TODO: Horizontal grid
+// TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
+// TODO: TESTS
+
+var Main = function () {
+	function Main(params) {
+		_classCallCheck(this, Main);
+
+		var items = document.querySelectorAll('.chocolate-item');
+		var gridContainer = document.querySelector('.chocolate-container');
+		var columnWidth = params.columnWidth,
+		    columnMargin = params.columnMargin,
+		    containerMaxWidth = params.containerMaxWidth,
+		    transitionDuration = params.transitionDuration,
+		    transitionTimingFunction = params.transitionTimingFunction;
+
+
+		_Styles2.default.setItemStylesBeforeGridCreated(items, columnWidth, gridContainer, containerMaxWidth, transitionDuration, transitionTimingFunction);
+
+		this.setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer)();
+
+		window.addEventListener('resize', this.setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer));
+	}
+
+	_createClass(Main, [{
+		key: 'setSize',
+		value: function setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer) {
+			return function () {
+				var containerWidth = window.innerWidth <= containerMaxWidth ? window.innerWidth : containerMaxWidth;
+
+				var params = _Utils2.default.formatData(containerWidth, columnWidth, columnMargin, items);
+
+				new _Grid2.default(params, items, gridContainer);
+			};
+		}
+	}]);
+
+	return Main;
+}();
+
+exports.default = Main;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _types = __webpack_require__(0);
+
+var _Styles = __webpack_require__(1);
+
+var _Styles2 = _interopRequireDefault(_Styles);
+
+var _Utils = __webpack_require__(2);
 
 var _Utils2 = _interopRequireDefault(_Utils);
 
@@ -238,18 +361,17 @@ var Grid = function () {
 			    columnWidth = params.columnWidth,
 			    columnMargin = params.columnMargin;
 
+			var grid = {};
 			var elementsOfGrid = itemsHeight;
 			var indexOfSmallestColumn = 0;
 			var sumOfHeightsForColumns = 0;
-
 			var numberOfElementsInGrid = elementsOfGrid.length;
-			var grid = {};
 
 			for (var j = 0; j < columnsNumber; j++) {
 				grid[j] = [];
 			}
 
-			for (var i = 0; i < numberOfElementsInGrid; i++) {
+			for (var i = 0; i < numberOfElementsInGrid && elementsOfGrid.length > 0; i++) {
 				for (var col = 0; col < columnsNumber && elementsOfGrid.length > 0; col++) {
 					// Till elements array will not be empty
 					var elementOfGrid = elementsOfGrid.splice(0, 1)[0]; // Grab first element till zero length
@@ -280,149 +402,6 @@ var Grid = function () {
 }();
 
 exports.default = Grid;
-
-/***/ }),
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Utils = function () {
-	function Utils() {
-		_classCallCheck(this, Utils);
-
-		this.getColumnNumber = function (containerWidth, columnWidth) {
-			return Math.floor(containerWidth / columnWidth);
-		};
-
-		this.getContainerWidth = function (columnWidth, columnNumber, columnMargin) {
-			return columnNumber * (columnWidth + columnMargin) - columnMargin;
-		};
-
-		this.getIndexOfSmallestColumn = function (allColumns) {
-			return allColumns.indexOf(Math.min.apply(Math, _toConsumableArray(allColumns)));
-		};
-
-		this.getMapOfHeightsForEveryColumn = function (column) {
-			return column.map(function (e) {
-				return parseInt(e[Object.keys(e)[0]]);
-			});
-		};
-	}
-
-	_createClass(Utils, [{
-		key: 'getHeightOfItems',
-		value: function getHeightOfItems(items) {
-			var numbers = [];
-			items.forEach(function (e, i) {
-				numbers.push(_defineProperty({}, i, e.clientHeight));
-			});
-			return numbers;
-		}
-	}, {
-		key: 'getSumOfHeightsForColumns',
-		value: function getSumOfHeightsForColumns(grid) {
-			var _this = this;
-
-			return Object.keys(grid).map(function (i) {
-				var mapOfHeights = _this.getMapOfHeightsForEveryColumn(grid[i]);
-				if (mapOfHeights.length === 1) {
-					return mapOfHeights[0];
-				} else if (mapOfHeights.length > 1) {
-					return mapOfHeights.reduce(function (a, b) {
-						return a + b;
-					});
-				}
-			});
-		}
-	}, {
-		key: 'getContainerHeight',
-		value: function getContainerHeight(columnMargin, grid) {
-			var sumOfHeightsForColumns = this.getSumOfHeightsForColumns(grid);
-			var maxVal = Math.max.apply(Math, _toConsumableArray(sumOfHeightsForColumns));
-			return maxVal + grid[sumOfHeightsForColumns.indexOf(maxVal)].length * columnMargin;
-		}
-	}, {
-		key: 'throwError',
-		value: function throwError(customMessage, errorCode) {
-			throw new Error(customMessage + ': ' + errorCode);
-		}
-	}, {
-		key: 'guard',
-		value: function guard(params) {
-			var properties = [{ name: 'containerSelector', type: 'string' }, { name: 'containerMaxWidth', type: 'number' }, { name: 'itemSelector', type: 'string' }, { name: 'columnWidth', type: 'number' }, { name: 'columnMargin', type: 'number' }];
-
-			var errorCodes = {
-				E_001: 'Property is not defined',
-				E_002: 'Invalid type of parameter',
-				E_003: 'Property is empty',
-				E_004: 'Invalid size of container',
-				E_005: 'Invalid value',
-				E_006: 'Missing container selector property',
-				E_007: 'Missing item selector property',
-				E_008: 'Missing width of item',
-				E_009: 'Missing margin property',
-				E_010: 'Missing container max width property'
-			};
-
-			properties.map(function (property) {
-				if (params.hasOwnProperty(property.name)) {
-					if (_typeof(params[property.name]) === property.type) {
-						if (params[property.name] === undefined && params[property.name] === null && params[property.name] === false && params[property.name] === '') {
-							this.throwError(property.name, errorCodes['E_003']);
-						}
-					} else {
-						this.throwError(property.name, errorCodes['E_002']);
-					}
-				} else {
-					this.throwError(property.name, errorCodes['E_001']);
-				}
-			});
-			return params;
-		}
-	}, {
-		key: 'formatData',
-		value: function formatData(containerWidth, options, items) {
-			var itemSelector = options.itemSelector,
-			    columnWidth = options.columnWidth,
-			    columnMargin = options.columnMargin,
-			    containerSelector = options.containerSelector;
-
-			var itemsHeight = this.getHeightOfItems(items);
-			var columnsNumber = this.getColumnNumber(containerWidth, columnWidth);
-			var containerFullWidth = this.getContainerWidth(columnWidth, columnsNumber, columnMargin);
-			return {
-				itemsHeight: itemsHeight,
-				columnsNumber: columnsNumber,
-				itemSelector: itemSelector,
-				columnWidth: columnWidth,
-				columnMargin: columnMargin,
-				containerSelector: containerSelector,
-				containerFullWidth: containerFullWidth
-			};
-		}
-	}]);
-
-	return Utils;
-}();
-
-exports.default = new Utils();
 
 /***/ })
 /******/ ]);

@@ -1,37 +1,77 @@
+import { IndexHeightItem, Params, GridType } from '../types'
 import Grid from '../grid/Grid'
 import Utils from '../utils/Utils'
 import Styles from '../styles/Styles'
 
-// TODO new properties: animationSpeed, fullSizeOfContainer, innerLeftRightMargin, innerBottomMargin
+// TODO: Horizontal grid
+// TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
 // TODO: TESTS
 
 class Main {
-	constructor(params) {
-		const options = Utils.guard(params);
-		const items = document.querySelectorAll(".js-item");
-		const gridContainer = document.querySelector('.js-chocolate');
+	constructor (params: Params) {
+		const items = document.querySelectorAll('.chocolate-item');
+		const gridContainer = document.querySelector('.chocolate-container');
+		const {
+			columnWidth,
+			columnMargin,
+			containerMaxWidth,
+			transitionDuration,
+			transitionTimingFunction
+		} = params;
 		
-		Styles.setItemStylesBeforeGridCreated(items, options.columnWidth, gridContainer, options.containerMaxWidth);
-		this.execGridBuilder(items, gridContainer, options);
+		Styles.setItemStylesBeforeGridCreated(
+			items,
+			columnWidth,
+			gridContainer,
+			containerMaxWidth,
+			transitionDuration,
+			transitionTimingFunction
+		);
+		
+		this.setSize(
+			containerMaxWidth,
+			columnWidth,
+			columnMargin,
+			items,
+			gridContainer
+		)();
+		
+		window.addEventListener(
+			'resize',
+			this.setSize(
+				containerMaxWidth,
+				columnWidth,
+				columnMargin,
+				items,
+				gridContainer
+			)
+		);
 	}
 	
-	execGridBuilder (items, container, options) {
-		function setSize () {
-			const containerWidth = window.innerWidth <= options.containerMaxWidth
+	setSize (containerMaxWidth: number,
+			 columnWidth: number,
+			 columnMargin: number,
+			 items: Array<HTMLElement>,
+			 gridContainer: HTMLElement) {
+		return function () {
+			const containerWidth = window.innerWidth <= containerMaxWidth
 				? window.innerWidth
-				: options.containerMaxWidth
+				: containerMaxWidth;
+			
+			const params = Utils.formatData(
+				containerWidth,
+				columnWidth,
+				columnMargin,
+				items
+			);
 			
 			new Grid(
-				Utils.formatData(containerWidth - (options.columnWidth / 2), options, items),
+				params,
 				items,
-				container
-			)
+				gridContainer
+			);
 		}
-		
-		setSize()
-		
-		window.addEventListener('resize', setSize)
 	}
 }
 
-export default Main
+export default Main;

@@ -1,13 +1,12 @@
 class Styles {
-	// TODO container style set in twi func - fix this !!
-	
-	setItemStylesBeforeGridCreated(items, width, container, containerMaxWidth) {
-		container.style.maxWidth = containerMaxWidth + "px";
-		for (let e = 0; e < items.length; e++) {
-			items[e].style.width = width + "px"; // item width
-			items[e].style.position = "absolute"; // item position
-            items[e].style.transition = "all ease .5s"; // animation
-        }
+	setItemStylesBeforeGridCreated(items, width, container, containerMaxWidth, transitionDuration = 0.5, transitionTimingFunction = 'ease') {
+		container.style.maxWidth = `${containerMaxWidth}px`;
+		items.forEach((item, i) => {
+			item.style.width = `${width}px`;
+			item.style.position = "absolute";
+			item.style.transition = `all ${transitionTimingFunction} ${transitionDuration}s`;
+			item.querySelector('.text').textContent = `${i}`; // TEMPORARY
+		});
 	}
 	
     setContainerStyles(container, height, width) {
