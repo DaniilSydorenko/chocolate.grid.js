@@ -28,24 +28,17 @@ class Main {
 			transitionTimingFunction
 		);
 		
-		this.setSize(
+		const runSetSize = this.setSize(
 			containerMaxWidth,
 			columnWidth,
 			columnMargin,
 			items,
 			gridContainer
-		)();
-		
-		window.addEventListener(
-			'resize',
-			this.setSize(
-				containerMaxWidth,
-				columnWidth,
-				columnMargin,
-				items,
-				gridContainer
-			)
 		);
+		
+		runSetSize();
+		
+		window.addEventListener('resize', runSetSize);
 	}
 	
 	setSize (containerMaxWidth: number,

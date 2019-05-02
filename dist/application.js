@@ -124,6 +124,9 @@ var Styles = function () {
 	return Styles;
 }();
 
+// TODO common function for styles changing
+// styleit(element, ['width', 'position], ['100px', 'absolute'])
+
 exports.default = new Styles();
 
 /***/ }),
@@ -296,9 +299,11 @@ var Main = function () {
 
 		_Styles2.default.setItemStylesBeforeGridCreated(items, columnWidth, gridContainer, containerMaxWidth, transitionDuration, transitionTimingFunction);
 
-		this.setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer)();
+		var runSetSize = this.setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer);
 
-		window.addEventListener('resize', this.setSize(containerMaxWidth, columnWidth, columnMargin, items, gridContainer));
+		runSetSize();
+
+		window.addEventListener('resize', runSetSize);
 	}
 
 	_createClass(Main, [{
