@@ -23,4 +23,7 @@ class Styles {
 	}
 }
 
+// TODO common function for styles changing
+// styleit(element, ['width', 'position], ['100px', 'absolute'])
+
 export default new Styles();
