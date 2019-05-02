@@ -7,6 +7,8 @@ import Styles from '../styles/Styles'
 // TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
 // TODO: TESTS
 
+// TODO CONVERT CODE INTO TYPESCRIPT
+
 class Main {
 	constructor (params: Params) {
 		const items = document.querySelectorAll('.chocolate-item');

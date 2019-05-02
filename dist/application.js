@@ -284,6 +284,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
 // TODO: TESTS
 
+// TODO CONVERT CODE INTO TYPESCRIPT
+
 var Main = function () {
 	function Main(params) {
 		_classCallCheck(this, Main);
