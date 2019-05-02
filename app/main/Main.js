@@ -7,7 +7,7 @@ import Styles from '../styles/Styles'
 // TODO: new properties: fullSizeOfContainer, sideMargin, bottomMargin
 // TODO: TESTS
 
-// TODO CONVERT CODE INTO TYPESCRIPT
+// TODO FLOW CONVERT CODE INTO TYPESCRIPT
 
 class Main {
 	constructor (params: Params) {
